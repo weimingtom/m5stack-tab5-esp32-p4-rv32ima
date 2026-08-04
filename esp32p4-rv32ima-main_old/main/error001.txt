@@ -1,0 +1,73 @@
+psram init
+Available PSRAM: 33424728 bytes (31.88 MB)
+Attempting to allocate 30082255 bytes (28.69 MB)...
+SUCCESS: PSRAM allocated at 0x48030a08, size: 30082255 bytes (28.69 MB)
+Initializing PSRAM to zero...
+PSRAM initialized successfully!
+
+Loading kernel from flash...
+
+=== Loading Kernel from Flash ===
+Found kernel partition:
+  Label: kernel
+  Address: 0x110000
+  Size: 14680064 bytes (14.00 MB)
+WARNING: Partition size (14680064) > RAM size (8388608)
+Will only load first 8388608 bytes
+
+Loading kernel from flash to PSRAM...
+This will take a moment...
+................................................................................................................................
+✓ Kernel loaded successfully from flash!
+Total loaded: 8388608 bytes (8.00 MB)
+
+=== Verifying Kernel Header ===
+First 64 bytes of loaded kernel:
+f9 00 92 44 02 49 01 45 41 01 82 80 97 00 b6 0f
+e7 80 40 79 09 05 0a 05 26 95 0f 00 30 03 1c 41
+0f 00 30 02 98 47 b2 40 dc c0 79 8c 33 37 80 00
+13 35 14 00 22 44 23 84 e4 00 23 20 f9 00 92 44
+
+✗ RISCV magic NOT found! Expected at 0x30
+First instruction: 0x449200f9
+Expected: 0x05c0006f (j 0x5c)
+
+RV32IMA starting
+Initial PC: 0x80000000
+--- Warning: Writing to serial is timing out. Please make sure that your application supports an interactive console and that you have picked the correct console for serial communication.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
