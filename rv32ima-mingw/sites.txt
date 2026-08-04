@@ -1,0 +1,6 @@
+mini-rv32ima:
+	https://github.com/cnlohr/mini-rv32ima
+	https://github.com/weimingtom/mini-rv32ima_fork
+
+esp32p4-rv32ima:
+	https://github.com/Epiczhul/esp32p4-rv32ima
