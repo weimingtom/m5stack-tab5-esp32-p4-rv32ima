@@ -16,6 +16,13 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 只是5.4.4的安装程序没有显示ESP32P4的勾选，但不用管，
 默认安装就可以，是可以设置目标板为esp32p4的 ​​​
 ```
+* You should install **ONLY ONE** ESP-IDF instance on your computer at the same time, otherwise when you uninstall one of the ESP-IDF instances, the other instances will be unavailable (the shortcut will be deleted). It is recommended to reinstall the other ESP-IDF instances if you encounter similar situations
+```
+你应该在电脑上同时安装不多于一个ESP-IDF实例，
+否则当你卸载其中一个ESP-IDF实例，
+其他实例就不可用（快捷方式被删除），
+建议如果遇到类似的情况最好重新安装其他ESP-IDF实例
+```
 
 ## References
 * https://github.com/Epiczhul/esp32p4-rv32ima
