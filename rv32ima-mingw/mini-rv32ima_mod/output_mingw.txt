@@ -1,0 +1,159 @@
+$ make test
+./mini-rv32ima
+psram init
+
+Loading kernel from flash...
+RV32IMA starting
+Initial PC: 0x80000000
+0--PC: 0x80000000, instct==-1, sizeof(void*)==4
+0.5--PC: 0x80000000, instct==-1
+1--PC: 0x80000000, instct==-1
+ [    0.000000] Linux version 6.1.14 (cnlohr@cnlohr-1520) (riscv32-buildroot-linux-uclibc-gcc.br_real (Buildroot 2023.02-145-gf6c5488ad2) 12.2.0, GNU ld (GNU Binutils) 2.38) #4 Sat Mar 25 09:20:08 EDT 2023
+[    0.000000] Machine model: riscv-minimal-nommu,qemu
+[    0.000000] earlycon: uart8250 at MMIO 0x10000000 (options '1000000')
+[    0.000000] printk: bootconsole [uart8250] enabled
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000080000000-0x00000000807fefff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fefff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fefff]
+[    0.000000] riscv: base ISA extensions aim
+[    0.000000] riscv: ELF capabilities aim
+[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2031
+[    0.000000] Kernel command line: earlycon=uart8250,mmio,0x10000000,1000000 console=ttyS0
+[    0.000000] Dentry cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.000000] Sorting __ex_table...
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 4528K/8188K available (1487K kernel code, 281K rwdata, 157K rodata, 1464K init, 145K bss, 3660K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 32 local interrupts mapped
+[    0.000000] clint: clint@11000000: timer running at 1000000 Hz
+[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x1d854df40, max_idle_ns: 3526361616960 ns
+[    0.000011] sched_clock: 64 bits at 1000kHz, resolution 1000ns, wraps every 2199023255500ns
+[    0.009075] Console: colour dummy device 80x25
+[    0.013299] Calibrating delay loop (skipped), value calculated using timer frequency.. 2.00 BogoMIPS (lpj=10000)
+[    0.021985] pid_max: default: 4096 minimum: 301
+[    0.026028] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.031946] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.043282] devtmpfs: initialized
+[    0.050648] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.059789] futex hash table entries: 16 (order: -5, 192 bytes, linear)
+[    0.080791] clocksource: Switched to clocksource clint_clocksource
+[    0.131182] workingset: timestamp_bits=30 max_order=11 bucket_order=0
+[    0.315843] Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+[    0.325391] printk: console [ttyS0] disabled
+[    0.329679] 10000000.uart: ttyS0 at MMIO 0x10000000 (irq = 0, base_baud = 1048576) is a XR16850
+m[    0.337618] printk: console [ttyS0] enabled
+[    0.337618] printk: console [ttyS0] enabled
+[    0.344771] printk: bootconsole [uart8250] disabled
+[    0.344771] printk: bootconsole [uart8250] disabled
+``m[    0.363401] Freeing unused kernel image (initmem) memory: 1464K
+[    0.366273] This architecture does not have kernel memory protection.
+[    0.369760] Run /init as init process
+[    0.372235] init: page allocation failure: order:8, mode:0xcc0(GFP_KERNEL), nodemask=(null)
+[    0.376869] CPU: 0 PID: 1 Comm: init Not tainted 6.1.14 #4
+[    0.378824] Hardware name: riscv-minimal-nommu,qemu (DT)
+[    0.380821] Call Trace:
+[    0.381772] [<80003520>] 0x80003520
+[    0.383302] [<8016db6c>] 0x8016db6c
+[    0.384682] [<8017051c>] 0x8017051c
+[    0.386123] [<80170554>] 0x80170554
+[    0.387408] [<800778a0>] 0x800778a0
+[    0.388691] [<80077cf0>] 0x80077cf0
+[    0.390394] [<800781f4>] 0x800781f4
+[    0.392021] [<80078550>] 0x80078550
+[    0.393866] [<80078a0c>] 0x80078a0c
+[    0.395429] [<8007320c>] 0x8007320c
+[    0.396722] [<80069f1c>] 0x80069f1c
+[    0.397987] [<80069fa4>] 0x80069fa4
+[    0.399418] [<800be168>] 0x800be168
+[    0.401074] [<8008a5d0>] 0x8008a5d0
+[    0.402819] [<8008b064>] 0x8008b064
+[    0.404560] [<8016da04>] 0x8016da04
+[    0.406343] [<801707fc>] 0x801707fc
+[    0.408171] [<80001e4c>] 0x80001e4c
+[    0.409745] Mem-Info:
+[    0.410996] active_anon:0 inactive_anon:0 isolated_anon:0
+[    0.410996]  active_file:0 inactive_file:0 isolated_file:0
+[    0.410996]  unevictable:525 dirty:0 writeback:0
+[    0.410996]  slab_reclaimable:51 slab_unreclaimable:144
+[    0.410996]  mapped:0 shmem:0 pagetables:0
+[    0.410996]  sec_pagetables:0 bounce:0
+[    0.410996]  kernel_misc_reclaimable:0
+[    0.410996]  free:738 free_pcp:0 free_cma:0
+[    0.427249] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB writeback_tmp:0kB kernel_stack:112kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+[    0.438713] Normal free:2952kB boost:0kB min:268kB low:332kB high:396kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB writepending:0kB present:8188kB managed:5992kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.450006] lowmem_reserve[]: 0 0
+[    0.451574] Normal: 4*4kB (UM) 5*8kB (UM) 3*16kB (M) 3*32kB (UM) 1*64kB (M) 3*128kB (UM) 3*256kB (UM) 3*512kB (UM) 0*1024kB 0*2048kB 0*4096kB = 2952kB
+[    0.458373] 532 total pagecache pages
+[    0.460144] 2047 pages RAM
+[    0.461431] 0 pages HighMem/MovableOnly
+[    0.463154] 549 pages reserved
+[    0.464531] nommu: Allocation of length 712704 from process 1 (init) failed
+[    0.467678] active_anon:0 inactive_anon:0 isolated_anon:0
+[    0.467678]  active_file:0 inactive_file:0 isolated_file:0
+[    0.467678]  unevictable:525 dirty:0 writeback:0
+[    0.467678]  slab_reclaimable:51 slab_unreclaimable:144
+[    0.467678]  mapped:0 shmem:0 pagetables:0
+[    0.467678]  sec_pagetables:0 bounce:0
+[    0.467678]  kernel_misc_reclaimable:0
+[    0.467678]  free:738 free_pcp:0 free_cma:0
+[    0.484250] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB writeback_tmp:0kB kernel_stack:112kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+[    0.494571] Normal free:2952kB boost:0kB min:268kB low:332kB high:396kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB writepending:0kB present:8188kB managed:5992kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.505808] lowmem_reserve[]: 0 0
+[    0.507583] Normal: 4*4kB (UM) 5*8kB (UM) 3*16kB (M) 3*32kB (UM) 1*64kB (M) 3*128kB (UM) 3*256kB (UM) 3*512kB (UM) 0*1024kB 0*2048kB 0*4096kB = 2952kB
+[    0.514430] 532 total pagecache pages
+[    0.516275] binfmt_flat: Unable to allocate RAM for process text/data, errno -12
+[    0.519756] Failed to execute /init (error -12)
+[    0.521712] Run /sbin/init as init process
+[    0.524660] nommu: Allocation of length 712704 from process 1 (init) failed
+[    0.527597] active_anon:0 inactive_anon:0 isolated_anon:0
+[    0.527597]  active_file:0 inactive_file:0 isolated_file:0
+[    0.527597]  unevictable:525 dirty:0 writeback:0
+[    0.527597]  slab_reclaimable:51 slab_unreclaimable:144
+[    0.527597]  mapped:0 shmem:0 pagetables:0
+[    0.527597]  sec_pagetables:0 bounce:0
+[    0.527597]  kernel_misc_reclaimable:0
+[    0.527597]  free:738 free_pcp:0 free_cma:0
+[    0.543687] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB writeback_tmp:0kB kernel_stack:112kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+[    0.555776] Normal free:2952kB boost:0kB min:268kB low:332kB high:396kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB writepending:0kB present:8188kB managed:5992kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.567126] lowmem_reserve[]: 0 0
+[    0.568725] Normal: 4*4kB (UM) 5*8kB (UM) 3*16kB (M) 3*32kB (UM) 1*64kB (M) 3*128kB (UM) 3*256kB (UM) 3*512kB (UM) 0*1024kB 0*2048kB 0*4096kB = 2952kB
+[    0.575302] 532 total pagecache pages
+[    0.577589] binfmt_flat: Unable to allocate RAM for process text/data, errno -12
+[    0.580993] Starting init: /sbin/init exists but couldn't execute it (error -12)
+[    0.584228] Run /etc/init as init process
+[    0.586300] Run /bin/init as init process
+[    0.588483] Run /bin/sh as init process
+[    0.591410] nommu: Allocation of length 712704 from process 1 (sh) failed
+[    0.594695] active_anon:0 inactive_anon:0 isolated_anon:0
+[    0.594695]  active_file:0 inactive_file:0 isolated_file:0
+[    0.594695]  unevictable:525 dirty:0 writeback:0
+[    0.594695]  slab_reclaimable:51 slab_unreclaimable:144
+[    0.594695]  mapped:0 shmem:0 pagetables:0
+[    0.594695]  sec_pagetables:0 bounce:0
+[    0.594695]  kernel_misc_reclaimable:0
+[    0.594695]  free:738 free_pcp:0 free_cma:0
+[    0.609999] Node 0 active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB isolated(anon):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB writeback_tmp:0kB kernel_stack:112kB pagetables:0kB sec_pagetables:0kB all_unreclaimable? no
+[    0.620412] Normal free:2952kB boost:0kB min:268kB low:332kB high:396kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:2100kB writepending:0kB present:8188kB managed:5992kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+[    0.632341] lowmem_reserve[]: 0 0
+[    0.633954] Normal: 4*4kB (UM) 5*8kB (UM) 3*16kB (M) 3*32kB (UM) 1*64kB (M) 3*128kB (UM) 3*256kB (UM) 3*512kB (UM) 0*1024kB 0*2048kB 0*4096kB = 2952kB
+[    0.640766] 532 total pagecache pages
+[    0.642407] binfmt_flat: Unable to allocate RAM for process text/data, errno -12
+[    0.645672] Starting init: /bin/sh exists but couldn't execute it (error -12)
+[    0.648832] Kernel panic - not syncing: No working init found.  Try passing init= option to kernel. See Linux Documentation/admin-guide/init.rst for guidance.
+[    0.656137] CPU: 0 PID: 1 Comm: sh Not tainted 6.1.14 #4
+[    0.658565] Hardware name: riscv-minimal-nommu,qemu (DT)
+[    0.660535] Call Trace:
+[    0.661799] [<80003520>] 0x80003520
+[    0.663465] [<8016db6c>] 0x8016db6c
+[    0.665018] [<8017051c>] 0x8017051c
+[    0.666310] [<80170554>] 0x80170554
+[    0.667632] [<8016dcb0>] 0x8016dcb0
+[    0.669010] [<80170888>] 0x80170888
+[    0.670740] [<80001e4c>] 0x80001e4c
+[    0.672299] ---[ end Kernel panic - not syncing: No working init found.  Try passing init= option to kernel. See Linux Documentation/admin-guide/init.rst for guidance. ]---
+make: *** [test] Error 58

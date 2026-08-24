@@ -45,9 +45,10 @@ static void MiniSleep();
 		\
 		/* Detect runaway recursion */ \
 		if (trap_nesting_level > 10) { \
+			int i; \
 			printf("\n[FATAL] Trap nesting level = %d\n", trap_nesting_level); \
 			printf("Last 10 trap PCs: "); \
-			for (int i = 0; i < 10; i++) { \
+			for (i = 0; i < 10; i++) { \
 				printf("0x%08" PRIx32 " ", last_trap_pc[i]); \
 			} \
 			printf("\n"); \

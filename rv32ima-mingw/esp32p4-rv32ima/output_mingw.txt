@@ -1,0 +1,69 @@
+$ make test
+./mini-rv32ima
+psram init
+
+Loading kernel from flash...
+RV32IMA starting
+Initial PC: 0x80000000
+[    0.000000] Linux version 6.9.0-rc1+ (zjs@xhacker) (riscv64-linux-gnu-gcc (Debian 13.2.0-12) 13.2.0, GNU ld (GNU Binutils for Debian) 2.42) #19 Thu Apr  4 09:56:33 CST 2024
+[    0.000000] Machine model: riscv-minimal-nommu,qemu
+[    0.000000] earlycon: uart8250 at MMIO 0x10000000 (options '1000000')
+[    0.000000] printk: legacy bootconsole [uart8250] enabled
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000] Falling back to deprecated "riscv,isa"
+[    0.000000] riscv: base ISA extensions aim
+[    0.000000] riscv: ELF capabilities aim
+[CSR_WRITE] csr=0xf11 value=0xff0ff0ff
+[CSR_READ] Unhandled csr=0xf12 -> 0x00000000
+[CSR_WRITE] csr=0xf12 value=0x00000000
+[CSR_READ] Unhandled csr=0xf13 -> 0x00000000
+[CSR_WRITE] csr=0xf13 value=0x00000000
+[    0.000000] Kernel command line: earlycon=uart8250,mmio,0x10000000,1000000 console=ttyS0
+[    0.000000] Dentry cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2032
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 6492K/8192K available (933K kernel code, 68K rwdata, 106K rodata, 438K init, 29K bss, 1700K reser
+ved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-1, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 32 local interrupts mapped
+[    0.000000] clint: clint@11000000: timer running at 1000000 Hz
+[    0.000000] clocksource: clint_clocksource: mask: 0xffffffffffffffff max_cycles: 0x1d854df40, max_idle_ns: 3526361616
+960 ns
+[    0.000000] sched_clock: 64 bits at 1000kHz, resolution 1000ns, wraps every 2199023255500ns
+[    0.014085] Calibrating delay loop (skipped), value calculated using timer frequency.. 2.00 BogoMIPS (lpj=10000)
+[    0.026241] pid_max: default: 4096 minimum: 301
+[    0.040850] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.054030] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.247197] devtmpfs: initialized
+[    0.420633] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.436443] futex hash table entries: 16 (order: -5, 192 bytes, linear)
+[CSR_WRITE] csr=0xf11 value=0xff0ff0ff
+[CSR_READ] Unhandled csr=0xf12 -> 0x00000000
+[CSR_WRITE] csr=0xf12 value=0x00000000
+[CSR_READ] Unhandled csr=0xf13 -> 0x00000000
+[CSR_WRITE] csr=0xf13 value=0x00000000
+[    0.665327] clocksource: Switched to clocksource clint_clocksource
+[    1.001667] workingset: timestamp_bits=30 max_order=11 bucket_order=0
+[    1.128860] Serial: 8250/16550 driver, 1 ports, IRQ sharing disabled
+[    1.277447] of_serial 10000000.uart: error -6: IRQ index 0 not found
+[    1.354024] printk: legacy console [ttyS0] disabled
+[    1.418652] 10000000.uart: ttyS0 at MMIO 0x10000000 (irq = 0, base_baud = 1048576) is a XR16850
+[    1.434164] printk: legacy console [ttyS0] enabled
+[    1.434164] printk: legacy console [ttyS0] enabled
+[    1.452629] printk: legacy bootconsole [uart8250] disabled
+[    1.452629] printk: legacy bootconsole [uart8250] disabled
+[    1.947617] clk: Disabling unused clocks
+[    2.743537] Warning: unable to open an initial console.
+[    2.919613] Freeing unused kernel image (initmem) memory: 436K
+[    2.932386] This architecture does not have kernel memory protection.
+[    2.944332] Run /init as init process
+starting pid 19, tty '/dev/console': '/sbin/getty -L -n -l /bin/sh console 0 vt100'
+
+~ # make: *** [test] Error 58

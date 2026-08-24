@@ -128,7 +128,8 @@ MINIRV32_DECORATE int32_t MiniRV32IMAStep( struct MiniRV32IMAState * state, uint
 	uint32_t rval = 0;
 	uint32_t pc = CSR( pc );
 	uint32_t cycle = CSR( cyclel );
-
+    int icount;
+	
 	if( ( CSR( mip ) & (1<<7) ) && ( CSR( mie ) & (1<<7) /*mtie*/ ) && ( CSR( mstatus ) & 0x8 /*mie*/) )
 	{
 		// Timer interrupt.
@@ -136,7 +137,7 @@ MINIRV32_DECORATE int32_t MiniRV32IMAStep( struct MiniRV32IMAState * state, uint
 		pc -= 4;
 	}
 	else // No timer interrupt?  Execute a bunch of instructions.
-	for( int icount = 0; icount < count; icount++ )
+	for( icount = 0; icount < count; icount++ )
 	{
 		uint32_t ir = 0;
 		rval = 0;
