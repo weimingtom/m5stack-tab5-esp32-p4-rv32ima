@@ -35,3 +35,5 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 * https://www.cnblogs.com/jeason1997/p/19122455
 * https://github.com/tvlad1234/linux-ch32v003
 * https://github.com/tvlad1234/tiny-rv32ima
+* https://github.com/GrieferPig/rv32ima-emu
+
