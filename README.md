@@ -37,3 +37,6 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 * https://github.com/tvlad1234/tiny-rv32ima
 * https://github.com/GrieferPig/rv32ima-emu
 
+## How to port to mingw
+* https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
+
