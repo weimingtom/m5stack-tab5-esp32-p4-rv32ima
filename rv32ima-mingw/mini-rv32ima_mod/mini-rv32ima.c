@@ -189,6 +189,14 @@ static void MiniSleep()
 {
 	Sleep(1);
 }
+#else
+
+#include <unistd.h>
+
+static void MiniSleep()
+{
+	usleep(500);
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////

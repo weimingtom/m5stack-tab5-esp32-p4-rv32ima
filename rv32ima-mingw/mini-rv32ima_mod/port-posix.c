@@ -22,7 +22,7 @@
 extern struct MiniRV32IMAState core;
 extern void DumpState(struct MiniRV32IMAState *core);
 extern void app_main(void);
-#if !defined(__MINGW32__)
+#if 0 //!defined(__MINGW32__)
 extern char kernel_start[], kernel_end[];
 #else
 static char *kernel_start, *kernel_end;
@@ -189,7 +189,7 @@ int load_images(int ram_size, int *kern_len)
 {
 	long flen;
 
-#if !defined(__MINGW32__)
+#if 0 //!defined(__MINGW32__)
 	flen = kernel_end - kernel_start;
 #else
 	{
@@ -211,7 +211,7 @@ int load_images(int ram_size, int *kern_len)
 			fclose(file);
 			return -1;
 		}
-		size_t bytesRead = fread(buffer, 1, fileSize, file); // 读取文件内容
+		size_t bytesRead = fread(buffer, 1, fileSize, file); // read file content
 		if (bytesRead != fileSize) {
 			perror("Failed to read the whole file");
 			free(buffer);
