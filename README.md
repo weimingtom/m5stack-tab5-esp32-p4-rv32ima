@@ -32,10 +32,13 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 * https://github.com/xhackerustc/uc-rv32ima
 * https://github.com/cnlohr/mini-rv32ima-images
 * https://github.com/RCSN/hpm_rv32ima
-* https://www.cnblogs.com/jeason1997/p/19122455
+* https://www.cnblogs.com/jeason1997/p/19122455  
+在单片机上运行Linux  
 * https://github.com/tvlad1234/linux-ch32v003
 * https://github.com/tvlad1234/tiny-rv32ima
 * https://github.com/GrieferPig/rv32ima-emu
+* ESP32 也能跑 Linux 了  
+https://mp.weixin.qq.com/s/AGv0u_onAEG6P77Jw-k6qw  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
