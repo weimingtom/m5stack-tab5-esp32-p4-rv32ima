@@ -39,6 +39,12 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 * https://github.com/GrieferPig/rv32ima-emu
 * ESP32 也能跑 Linux 了  
 https://mp.weixin.qq.com/s/AGv0u_onAEG6P77Jw-k6qw  
+* https://www.cnx-software.com/2026/08/22/espressif-systems-releases-a-linux-bsp-developer-preview-for-esp32-s31-risc-v-microprocessor/  
+https://x.com/cnxsoft/status/2091022194814120368  
+https://github.com/espressif/esp-linux-bsp  
+https://esp32-s31.espressif.com/en  
+https://gojimmypi.github.io/ESP32-S3-Linux/  
+https://documentation.espressif.com/en/home  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
