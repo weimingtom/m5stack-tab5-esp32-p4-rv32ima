@@ -1,7 +1,7 @@
 all : mini-rv32ima
 
 mini-rv32ima : mini-rv32ima.c mini-rv32ima.h default64mbdtc.h
-	gcc -o $@ $< -g -O2 -Wall
+	gcc -std=c99 -o $@ $< -g -O2 -Wall
 
 DownloadedImage :
 	wget https://github.com/cnlohr/mini-rv32ima-images/raw/master/images/linux-6.1.14-rv32nommu-cnl-1.zip -O linux-6.1.14-rv32nommu-cnl-1.zip

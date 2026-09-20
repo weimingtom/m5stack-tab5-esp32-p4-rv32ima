@@ -211,7 +211,7 @@ int load_images(int ram_size, int *kern_len)
 			fclose(file);
 			return -1;
 		}
-		size_t bytesRead = fread(buffer, 1, fileSize, file); // 读取文件内容
+		size_t bytesRead = fread(buffer, 1, fileSize, file); // read file content
 		if (bytesRead != fileSize) {
 			perror("Failed to read the whole file");
 			free(buffer);

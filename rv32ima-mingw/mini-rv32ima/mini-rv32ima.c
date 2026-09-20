@@ -178,6 +178,8 @@ restart:
 	core->regs[11] = dtb_ptr?(dtb_ptr+MINIRV32_RAM_IMAGE_OFFSET):0; //dtb_pa (Must be valid pointer) (Should be pointer to dtb)
 	core->extraflags |= 3; // Machine-mode.
 
+printf("dtb_file_name == %08X, core->regs[11] == %08X\n", dtb_file_name, core->regs[11]);
+printf("dtb_ptr == %08X, MINIRV32_RAM_IMAGE_OFFSET == %08X\n", dtb_ptr, MINIRV32_RAM_IMAGE_OFFSET);
 	if( dtb_file_name == 0 )
 	{
 		// Update system ram size in DTB (but if and only if we're using the default DTB)
@@ -187,6 +189,12 @@ restart:
 		{
 			uint32_t validram = dtb_ptr;
 			dtb[0x13c/4] = (validram>>24) | ((( validram >> 16 ) & 0xff) << 8 ) | (((validram>>8) & 0xff ) << 16 ) | ( ( validram & 0xff) << 24 );
+		}
+		
+		printf("default64mbdtb==\n");
+		for (int i = 0; i < 16; ++i)
+		{
+			printf("dtb[%08X]: %08X\n", i * 4, dtb[i] & 0xffffffff);
 		}
 	}
 
