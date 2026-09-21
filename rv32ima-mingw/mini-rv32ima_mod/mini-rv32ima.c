@@ -9,8 +9,9 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#define USE_8M 0
-#if USE_8M
+#define USE_8M_DTC 0 //if 1, always crash and panic
+#define USE_16M_RAM 1
+#if USE_8M_DTC
 #include "default8mbdtc.h"
 #else
 #include "default64mbdtc.h"
@@ -19,8 +20,9 @@
 //#include "cache.h"
 #include "psram.h"
 
-#if USE_8M
-uint32_t ram_amt = 8 * 1024 * 1024; //FIMXE: see also core->regs[11] and dtb_ptr
+//at least ram_amt=16M, if ram_amt==8M, it will crash
+#if USE_16M_RAM
+uint32_t ram_amt = 16 * 1024 * 1024; //FIMXE: see also core->regs[11] and dtb_ptr
 #else
 // Just default RAM amount is 64MB.
 uint32_t ram_amt = 64*1024*1024;
@@ -71,7 +73,16 @@ static void DumpState( struct MiniRV32IMAState * core, uint8_t * ram_image );
 void app_main(void)
 {
 //---------------------------
-	kernel_command_line = 0;
+//default is 
+//Kernel command line: earlycon=uart8250,mmio,0x10000000,1000000 console=ttyS0
+//
+//at least: console=ttyS0
+//or mem=8M@0x80000000 console=ttyS0
+//
+//mem=8M@0x80000000 earlycon=uart8250,mmio,0x10000000,1000000 
+//	kernel_command_line = "mem=128M@0x80000000 console=ttyS0";//
+	kernel_command_line = 0; //"   ";//
+	
 
 
 
@@ -113,7 +124,7 @@ restart:
 	if (1)
 	{
 		// Load a default dtb.
-#if USE_8M		
+#if USE_8M_DTC		
 		dtb_ptr = ram_amt - sizeof(uc_dtb) - sizeof( struct MiniRV32IMAState );
 		memcpy( psram_base + dtb_ptr, uc_dtb, sizeof( uc_dtb ) );
 #else
@@ -122,7 +133,10 @@ restart:
 #endif	
 		if( kernel_command_line )
 		{
-			strncpy( (char*)( psram_base + dtb_ptr + 0xc0 ), kernel_command_line, 54 );
+			char command_line[54] = {0};
+			strncpy( command_line, kernel_command_line, strlen(kernel_command_line) + 1);
+			//write 54 bytes to .dtb file at address 0xc0 in the memory
+			strncpy( (char*)( psram_base + dtb_ptr + 0xc0 ), command_line, 54);
 		}
 	}
 
