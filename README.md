@@ -49,3 +49,21 @@ https://documentation.espressif.com/en/home
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
 
+## ram_amt, minimal memory, linux kernel memory footprint, >= 16 * 1024 * 1024 (for mini-rv32ima_mod)  
+```
+做Linux小电脑有门槛且很麻烦，目前最流行用f1c100s/f1c200s，
+因为这样不需要外置的ddr 2 sdram（如mt7628），
+为什么要人为制造焊接的麻烦呢？
+大概是为了做成奇怪接口的核心板或邮票核心板。
+另外linux好像有32M的最小内存足迹
+（不可考，例如龙芯1c，uclinux则最低可能到8M，但还是需要sdram）。
+如果换做我，我把linux 0.11移植到esp32算了（有psram可以代替sdram），
+这样可以方便焊接，xv6也算半个linux，不过移植就更难了。
+归根到底，就是大部分单片机都没有集成sdram，所以跑linux的门槛比较高
+
+我以前说过，linux好像有32M的最小内存。但今天我试了一下mini-rv32ima的linux模拟器，
+似乎可以修改ram_amt的最小内存数量为16M，内核仍然能正常启动，
+如果改成8M内核就会内核crash——我猜测这个panic是没办法绕过的，
+就是说对于这个内核预编译文件，它的内存footprint足迹是16M，
+比32M还要小，但再小就不行了
+```
