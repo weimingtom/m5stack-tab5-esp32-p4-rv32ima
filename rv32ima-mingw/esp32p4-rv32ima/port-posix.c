@@ -28,7 +28,10 @@ extern char kernel_start[], kernel_end[];
 static char *kernel_start, *kernel_end;
 #endif
 
+#define USE_RAM_FILE   0
+#if USE_RAM_FILE
 static int ramfd;
+#endif
 static int is_eofd;
 
 static void ResetKeyboardInput(void)
@@ -44,7 +47,9 @@ static void ResetKeyboardInput(void)
 
 static void CtrlC(int sig)
 {
+#if 1 //!defined(__MINGW32__)
 	DumpState(&core);
+#endif
 	ResetKeyboardInput();
 	exit(0);
 }
@@ -62,7 +67,7 @@ static void CaptureKeyboardInput(void)
 	term.c_lflag &= ~(ICANON | ECHO); // Disable echo as well
 	tcsetattr(0, TCSANOW, &term);
 #else	
-	//system(""); // Poorly documented tick: Enable VT100 Windows mode.
+	system(""); // Poorly documented tick: Enable VT100 Windows mode.
 #endif
 }
 
@@ -86,7 +91,8 @@ uint64_t GetTimeMicroseconds()
 
 int ReadKBByte(void)
 {
-#if 1 //!defined(__MINGW32__)
+//FIXME:???
+#if !defined(__MINGW32__)
 	char rxchar;
 	int rread;
 
@@ -158,8 +164,15 @@ int IsKBHit(void)
 #endif
 }
 
+extern uint32_t ram_amt;
+/*static*/ uint8_t *psram_base = NULL;
+#if 0
+/*static*/ size_t psram_size = 0;
+#endif
+
 int psram_init(void)
 {
+#if USE_RAM_FILE
 #if !defined(__MINGW32__)
 	ramfd = open("/tmp/ram", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
 #else
@@ -169,20 +182,33 @@ int psram_init(void)
 		perror("open\n");
 		return -1;
 	}
-
+#else
+	psram_base = (uint8_t *)calloc(1, ram_amt);
+	if (psram_base == 0) {
+		return -1;
+	}
+#endif
 	return 0;
 }
 
 int psram_read(uint32_t addr, void *buf, int len)
 {
+#if USE_RAM_FILE
 	lseek(ramfd, addr, SEEK_SET);
 	read(ramfd, buf, len);
+#else
+	memcpy(buf, psram_base + addr, len);
+#endif
 }
 
 int psram_write(uint32_t addr, void *buf, int len)
 {
+#if USE_RAM_FILE
 	lseek(ramfd, addr, SEEK_SET);
 	write(ramfd, buf, len);
+#else
+	memcpy(psram_base + addr, buf, len);
+#endif
 }
 
 int load_images(int ram_size, int *kern_len)
@@ -233,7 +259,11 @@ int load_images(int ram_size, int *kern_len)
 	if (kern_len)
 		*kern_len = flen;
 
+#if USE_RAM_FILE
 	write(ramfd, kernel_start, flen);
+#else
+	psram_write(0, kernel_start, flen);
+#endif
 
 	return 0;
 }

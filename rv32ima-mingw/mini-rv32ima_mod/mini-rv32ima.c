@@ -261,6 +261,7 @@ static uint32_t HandleControlStore( uint32_t addy, uint32_t val )
 
 static uint32_t HandleControlLoad( uint32_t addy )
 {
+//printf("========HandleControlLoad=========\n");	
 	// Emulating a 8250 / 16550 UART
 	if( addy == 0x10000005 )
 		return 0x60 | IsKBHit();

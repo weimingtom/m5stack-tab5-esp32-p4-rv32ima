@@ -1,0 +1,21 @@
+D:\msys_v11\home\Administrator\rv32ima-mingw\esp32p4-rv32ima\uc-rv32ima.c
+
+#if 0
+//original, but I don't know why it doesn't work
+
+
+===============
+
+
+#if 1 //!defined(__MINGW32__)
+	DumpState(&core);
+#endif
+
+===============
+
+D:\msys_v11\home\Administrator\rv32ima-mingw\esp32p4-rv32ima\port-posix.c
+
+#define USE_RAM_FILE   0
+#if USE_RAM_FILE
+
+USE_RAM_FILE should be 1 ???

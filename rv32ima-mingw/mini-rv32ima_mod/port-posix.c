@@ -67,7 +67,7 @@ static void CaptureKeyboardInput(void)
 	term.c_lflag &= ~(ICANON | ECHO); // Disable echo as well
 	tcsetattr(0, TCSANOW, &term);
 #else	
-	//system(""); // Poorly documented tick: Enable VT100 Windows mode.
+	system(""); // Poorly documented tick: Enable VT100 Windows mode.
 #endif
 }
 
@@ -91,7 +91,8 @@ uint64_t GetTimeMicroseconds()
 
 int ReadKBByte(void)
 {
-#if 1 //!defined(__MINGW32__)
+//FIXME:???
+#if !defined(__MINGW32__)
 	char rxchar;
 	int rread;
 
