@@ -9,9 +9,11 @@
 * PSRAM	32MB Octal
 
 ## TODO
+* 简化sdkconfig并写入sdkconfig.defaults
 * m5stack tab5 (esp32-p4) command input successfully, but no echo (echo after pressing enter)    
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/rv32ima-mingw/esp32p4-rv32ima/todo.txt  
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/mini-rv32ima_mod/_TODO_add_burn_Image_with_flash_download_tool.txt  
+* 记录如何用flash_download_tool写入Image/DownloadedImage, 如何烧录运行，包括两个工程
 
 ## ESP-IDF version for **Win10 and Win11**
 * ESP-IDF 5.4.4, for **Win10 and Win11**
