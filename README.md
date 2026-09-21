@@ -48,6 +48,9 @@ https://github.com/espressif/esp-linux-bsp
 https://esp32-s31.espressif.com/en  
 https://gojimmypi.github.io/ESP32-S3-Linux/  
 https://documentation.espressif.com/en/home  
+* https://bokuweb.github.io/undefined/articles/20230523.html  
+https://github.com/bokuweb/r2  
+https://bokuweb.github.io/r2/  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
