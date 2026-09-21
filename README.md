@@ -84,6 +84,11 @@ https://bokuweb.github.io/r2/
 就是说对于这个内核预编译文件，它的内存footprint足迹是16M，
 比32M还要小，但再小就不行了
 
+其实我怀疑dtc里面指定的内存大小不一定要和实际内存大小一样，
+就算dtc的内存配置值过大也可能不会导致内核panic——当然我还没实际测试过，
+我希望是这样 ​​​​（补注：试了好像也不行，总之dtc设置的数值最好不要过小，
+可能要根据内核版本不同而有所不同） ​​​
+
 我好像把esp32-p4 (M5Stack Tab5)运行Epiczhul/esp32p4-rv32ima和
 cnlohr/mini-rv32ima
 的rv32ima linux模拟器问题跑通了（虽然回显问题还没解决），
