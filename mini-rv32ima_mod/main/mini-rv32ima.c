@@ -9,14 +9,24 @@
 #include <unistd.h>
 #include <stdbool.h>
 
+#define USE_8M_DTC 0 //if 1, always crash and panic
+#define USE_16M_RAM 1
+#if USE_8M_DTC
+#include "default8mbdtc.h"
+#else
 #include "default64mbdtc.h"
+#endif
 #include "port.h"
 //#include "cache.h"
 #include "psram.h"
 
+//at least ram_amt=16M, if ram_amt==8M, it will crash
+#if USE_16M_RAM
+uint32_t ram_amt = 16 * 1024 * 1024; //FIMXE: see also core->regs[11] and dtb_ptr
+#else
 // Just default RAM amount is 64MB.
-//uint32_t ram_amt = 64*1024*1024;
-uint32_t ram_amt = 8 * 1024 * 1024;
+uint32_t ram_amt = 64*1024*1024;
+#endif
 int fail_on_all_faults = 0;
 
 //static int64_t SimpleReadNumberInt( const char * number, int64_t defaultNumber );
@@ -63,7 +73,16 @@ static void DumpState( struct MiniRV32IMAState * core, uint8_t * ram_image );
 void app_main(void)
 {
 //---------------------------
-	kernel_command_line = 0;
+//default is 
+//Kernel command line: earlycon=uart8250,mmio,0x10000000,1000000 console=ttyS0
+//
+//at least: console=ttyS0
+//or mem=8M@0x80000000 console=ttyS0
+//
+//mem=8M@0x80000000 earlycon=uart8250,mmio,0x10000000,1000000 
+//	kernel_command_line = "mem=128M@0x80000000 console=ttyS0";//
+	kernel_command_line = 0; //"   ";//
+	
 
 
 
@@ -98,18 +117,26 @@ void app_main(void)
 
 restart:
 
-	if (load_images(ram_amt, NULL) < 0)
+	if (load_images(/*8 * 1024 * 1024*/ ram_amt, NULL) < 0)
 		return;
 	
 	//FIXME:added
 	if (1)
 	{
 		// Load a default dtb.
+#if USE_8M_DTC		
+		dtb_ptr = ram_amt - sizeof(uc_dtb) - sizeof( struct MiniRV32IMAState );
+		memcpy( psram_base + dtb_ptr, uc_dtb, sizeof( uc_dtb ) );
+#else
 		dtb_ptr = ram_amt - sizeof(default64mbdtb) - sizeof( struct MiniRV32IMAState );
 		memcpy( psram_base + dtb_ptr, default64mbdtb, sizeof( default64mbdtb ) );
+#endif	
 		if( kernel_command_line )
 		{
-			strncpy( (char*)( psram_base + dtb_ptr + 0xc0 ), kernel_command_line, 54 );
+			char command_line[54] = {0};
+			strncpy( command_line, kernel_command_line, strlen(kernel_command_line) + 1);
+			//write 54 bytes to .dtb file at address 0xc0 in the memory
+			strncpy( (char*)( psram_base + dtb_ptr + 0xc0 ), command_line, 54);
 		}
 	}
 
@@ -124,6 +151,8 @@ restart:
 	core->regs[11] = dtb_ptr?(dtb_ptr+MINIRV32_RAM_IMAGE_OFFSET):0; //dtb_pa (Must be valid pointer) (Should be pointer to dtb)
 	core->extraflags |= 3; // Machine-mode.
 
+printf("dtb_file_name == %08X, core->regs[11] == %08X\n", (unsigned int)dtb_file_name, (unsigned int)core->regs[11]);
+printf("dtb_ptr == %08X, MINIRV32_RAM_IMAGE_OFFSET == %08X\n", (unsigned int)dtb_ptr, (unsigned int)MINIRV32_RAM_IMAGE_OFFSET);
 	if( dtb_file_name == 0 )
 	{
 		// Update system ram size in DTB (but if and only if we're using the default DTB)
@@ -133,6 +162,12 @@ restart:
 		{
 			uint32_t validram = dtb_ptr;
 			dtb[0x13c/4] = (validram>>24) | ((( validram >> 16 ) & 0xff) << 8 ) | (((validram>>8) & 0xff ) << 16 ) | ( ( validram & 0xff) << 24 );
+		}
+		
+		printf("default64mbdtb==\n");
+		for (int i = 0; i < 16; ++i)
+		{
+			printf("dtb[%08X]: %08X\n", (unsigned int)(i * 4), (unsigned int)(dtb[i] & 0xffffffff));
 		}
 	}
 	
@@ -190,10 +225,13 @@ static void MiniSleep()
 	Sleep(1);
 }
 #else
+
+#include <unistd.h>
+
 static void MiniSleep()
 {
 	usleep(500);
-}	
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -223,6 +261,7 @@ static uint32_t HandleControlStore( uint32_t addy, uint32_t val )
 
 static uint32_t HandleControlLoad( uint32_t addy )
 {
+//printf("========HandleControlLoad=========\n");	
 	// Emulating a 8250 / 16550 UART
 	if( addy == 0x10000005 )
 		return 0x60 | IsKBHit();

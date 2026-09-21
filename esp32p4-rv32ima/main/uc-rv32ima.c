@@ -22,7 +22,7 @@
 static int trap_nesting_level = 0;
 static uint32_t last_trap_pc[10] = {0};
 static int trap_pc_idx = 0;
-static uint32_t ram_amt = 8 * 1024 * 1024;
+/*static*/ uint32_t ram_amt = 8 * 1024 * 1024;
 
 struct MiniRV32IMAState;
 void DumpState(struct MiniRV32IMAState *core);
@@ -45,9 +45,10 @@ static void MiniSleep();
 		\
 		/* Detect runaway recursion */ \
 		if (trap_nesting_level > 10) { \
+			int i; \
 			printf("\n[FATAL] Trap nesting level = %d\n", trap_nesting_level); \
 			printf("Last 10 trap PCs: "); \
-			for (int i = 0; i < 10; i++) { \
+			for (i = 0; i < 10; i++) { \
 				printf("0x%08" PRIx32 " ", last_trap_pc[i]); \
 			} \
 			printf("\n"); \
@@ -302,6 +303,9 @@ static uint8_t uart_lcr = 0;
 static uint8_t uart_mcr = 0;
 static uint8_t uart_fcr = 0;
 
+#if 0
+//original, but I don't know why it doesn't work
+
 static uint32_t HandleControlStore(uint32_t addy, uint32_t val)
 {
     switch (addy) {
@@ -327,6 +331,7 @@ static uint32_t HandleControlLoad(uint32_t addy)
 {
     switch (addy) {
         case 0x10000000:
+printf("========HandleControlLoad=========\n");		
             if (uart_lcr & 0x80) return uart_divisor & 0xFF;
             return IsKBHit() ? ReadKBByte() : 0;
         case 0x10000001:
@@ -341,6 +346,41 @@ static uint32_t HandleControlLoad(uint32_t addy)
     }
     return 0;
 }
+#else
+//copy from mini-rv32ima.c, but  I don't know why it works ?
+static uint32_t HandleControlStore( uint32_t addy, uint32_t val )
+{
+	if( addy == 0x10000000 ) //UART 8250 / 16550 Data Buffer
+	{
+		printf( "%c", (int)val );
+		fflush( stdout );
+	}
+	return 0;
+}
+
+
+static uint32_t HandleControlLoad( uint32_t addy )
+{
+//printf("========HandleControlLoad=========\n");	
+	// Emulating a 8250 / 16550 UART
+	if( addy == 0x10000005 )
+		return 0x60 | IsKBHit();
+	else if( addy == 0x10000000 && IsKBHit() )
+		return ReadKBByte();
+	return 0;
+}
+#endif
+
+
+
+
+
+
+
+
+
+
+
 static void HandleOtherCSRWrite(uint8_t *image, uint16_t csrno, uint32_t value)
 {
 	uint32_t ptrstart, ptrend;
