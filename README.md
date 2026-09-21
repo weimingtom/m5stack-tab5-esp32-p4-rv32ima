@@ -1,6 +1,13 @@
 # m5stack-tab5-esp32-p4-rv32ima
 [Very WIP] My fork of rv32ima linux emulator on M5Stack Tab5 (M5Tab5) ESP32-P4, based on Epiczhul/esp32p4-rv32ima and cnlohr/mini-rv32ima
 
+## About M5Stack Tab5
+* https://docs.m5stack.com/zh_CN/core/Tab5  
+* 主控制器 SoC	ESP32-P4NRW32@RISC-V 32 位双核 360MHz + LP 单核 40MHz
+* 无线模块 SoC	ESP32-C6-MINI-1U
+* Flash	16MB
+* PSRAM	32MB Octal
+
 ## TODO
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/rv32ima-mingw/esp32p4-rv32ima/todo.txt  
 
