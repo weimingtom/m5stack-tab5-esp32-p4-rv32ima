@@ -89,7 +89,7 @@ https://bokuweb.github.io/r2/
 我希望是这样 ​​​​（补注：试了好像也不行，总之dtc设置的数值最好不要过小，
 可能要根据内核版本不同而有所不同） ​​​
 
-我好像把esp32-p4 (M5Stack Tab5)运行Epiczhul/esp32p4-rv32ima和
+（想了两个月）我好像把esp32-p4 (M5Stack Tab5)运行Epiczhul/esp32p4-rv32ima和
 cnlohr/mini-rv32ima
 的rv32ima linux模拟器问题跑通了（虽然回显问题还没解决），
 里面有不少问题（我觉得这俩工程都需要魔改才能运行），
