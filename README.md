@@ -7,8 +7,12 @@
 * 无线模块 SoC	ESP32-C6-MINI-1U
 * Flash	16MB
 * PSRAM	32MB Octal
+* 5 英寸 IPS TFT 显示屏，分辨率 1280×720（720P）
+* 采用 5 英寸 IPS TFT 显示屏，分辨率 1280×720（720P），搭载显示触控一体化驱动 IC：ST7123 / ST7121
 * 在已接入 USB 数据线或电池供电的情况下，长按复位按键（约 2 秒），直至内部绿色 LED 指示灯开始快速闪烁，松开按键后，设备即进入下载模式，等待固件烧录。
 * https://docs.m5stack.com/zh_CN/tab5/Tab5_Keyboard
+* https://github.com/waveshareteam/ESP32-P4-Platform
+* https://docs.waveshare.com/ESP32-P4
 
 ## TODO
 * 简化sdkconfig并写入sdkconfig.defaults
