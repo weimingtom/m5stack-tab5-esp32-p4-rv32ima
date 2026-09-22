@@ -20,6 +20,38 @@
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/rv32ima-mingw/esp32p4-rv32ima/todo.txt  
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/mini-rv32ima_mod/_TODO_add_burn_Image_with_flash_download_tool.txt  
 * 记录如何用flash_download_tool写入Image/DownloadedImage, 如何烧录运行，包括两个工程
+* wasm
+* Android version, How to emulate a console ?  
+* Refer to openrisc, how to display ?  
+https://github.com/weimingtom/wmt_ai_study/blob/master/fpga_cpld_001.md  
+```
+转，《MIPS构架之：我和龙芯有个约会》
+这篇文章解释为什么龙芯选择MIPS而不选择ARM，主要是因为MIPS允许改ISA架构指令。
+不过我的理解ARM应该也可以，不过要给钱罢了。现在有了RISC-V，应该也是一个出路，
+类似于很久以前的OpenRISC（不过OpenRISC据说是GPL的） ​​​
+
+mips的另一个心累的地方是，你怎么瞎折腾mips它也跑不起来linux，
+但openrisc却是有完整的一套方案可以跑linux，甚至有个很好看的web模拟器——
+所以有时候openrisc和risc-v会更好一些。不过也有可能openrisc和risc-v和
+mips都是同样的心累，只是表面上来看mips会更麻烦一些。当然对于喜欢折腾的人来说，
+这样不更好吗
+
+转，《Linux 6.1.14-rv32ima On Scratch》，这个的确看上去很酷炫，
+用Scratch去模拟RV32IMA和RISC-V Linux，但不如OpenRISC的浏览器linux酷炫，
+那个可以跑buildroot和命令行提示符（甚至可以图形输出），而这个虽然也是
+buildroot但我看不到命令行（可能太卡了），我看过这个Scratch有10M左右，
+解压成json有100多M
+
+写指令级别模拟器有多难呢？我觉得我可以什么都不做写这个写一年——不过我实际没做到。
+反正我现在还只是观望和用别人写好的模拟器代码跑，自己写写不出。我最想要的是
+m68k（16位机）和mips（32位机）的指令模拟器，能跑linux和uclinux，但只是梦，
+梦里什么都有。具体效果可以参考OpenRISC的网页版Linux 5，它就是长得我想要的模样
+
+其实不要说risc-v，其他架构要跑baremetal和linux都非常艰难。
+目前比较有希望的是mips, arm, risc-v和m68k，或者再加上x86和openrisc，
+但这些随便一种要跑通baremetal和linux都很难，
+也许需要一些时间去研究哪个切入点更容易一些 ​​​
+```
 
 ## ESP-IDF version for **Win10 and Win11**
 * ESP-IDF 5.4.4, for **Win10 and Win11**
