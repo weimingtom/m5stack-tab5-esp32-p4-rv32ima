@@ -53,6 +53,8 @@ m68k（16位机）和mips（32位机）的指令模拟器，能跑linux和uclinu
 但这些随便一种要跑通baremetal和linux都很难，
 也许需要一些时间去研究哪个切入点更容易一些 ​​​
 ```
+* refer to uclinux fbcon, /dev/fb0  
+https://github.com/weimingtom/wmt_uclinux_study  
 
 ## ESP-IDF version for **Win10 and Win11**
 * ESP-IDF 5.4.4, for **Win10 and Win11**
