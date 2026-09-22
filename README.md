@@ -23,7 +23,12 @@
 * wasm
 * Android version, How to emulate a console ?  
 * Refer to openrisc jor1k, how to display (write to /dev/fb0) ?  
-https://s-macke.github.io/jor1k/demos/main.html  
+https://s-macke.github.io/jor1k/demos/main.html
+```
+$ help
+(choose Graphic Demos)  
+(choose fbdemo)  
+``` 
 https://github.com/weimingtom/wmt_ai_study/blob/master/fpga_cpld_001.md  
 ```
 转，《MIPS构架之：我和龙芯有个约会》
