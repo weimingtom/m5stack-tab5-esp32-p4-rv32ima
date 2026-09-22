@@ -22,7 +22,8 @@
 * 记录如何用flash_download_tool写入Image/DownloadedImage, 如何烧录运行，包括两个工程
 * wasm
 * Android version, How to emulate a console ?  
-* Refer to openrisc, how to display ?  
+* Refer to openrisc jor1k, how to display (write to /dev/fb0) ?  
+https://s-macke.github.io/jor1k/demos/main.html  
 https://github.com/weimingtom/wmt_ai_study/blob/master/fpga_cpld_001.md  
 ```
 转，《MIPS构架之：我和龙芯有个约会》
