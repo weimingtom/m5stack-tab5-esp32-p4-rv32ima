@@ -7,6 +7,8 @@
 * 无线模块 SoC	ESP32-C6-MINI-1U
 * Flash	16MB
 * PSRAM	32MB Octal
+* 在已接入 USB 数据线或电池供电的情况下，长按复位按键（约 2 秒），直至内部绿色 LED 指示灯开始快速闪烁，松开按键后，设备即进入下载模式，等待固件烧录。
+* https://docs.m5stack.com/zh_CN/tab5/Tab5_Keyboard
 
 ## TODO
 * 简化sdkconfig并写入sdkconfig.defaults
