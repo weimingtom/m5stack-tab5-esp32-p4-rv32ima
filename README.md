@@ -23,6 +23,8 @@
 * 记录如何用flash_download_tool写入Image/DownloadedImage, 如何烧录运行，包括两个工程
 * wasm
 * Android version, How to emulate a console ?  
+* tiny386 on chrome      
+https://hchunhui.github.io/tiny386/  
 * Refer to openrisc jor1k, how to display (write to /dev/fb0) ?  
 https://s-macke.github.io/jor1k/demos/main.html
 ```
@@ -109,6 +111,25 @@ https://documentation.espressif.com/en/home
 * https://bokuweb.github.io/undefined/articles/20230523.html  
 https://github.com/bokuweb/r2  
 https://bokuweb.github.io/r2/  
+* https://github.com/xhackerustc/uc-rv32ima
+* https://github.com/hchunhui/tiny386  
+* https://hchunhui.github.io/tiny386/  
+* https://github.com/pjh64/tiny386-for-m5stack-tab5
+* https://github.com/HeathenUK/tiny386
+* https://github.com/Pedrocasf/tiny386-PicoCalc  
+* https://github.com/ElectroBoy404NotFound/ESP32-rv32-emu
+* https://github.com/ohdarling/linux-esp32s3
+* https://github.com/danielac32/esp32s3v1
+* https://github.com/verylowfreq/linux_on_m5stack
+* https://github.com/Devul5788/Coursework/tree/main/ECE%20411%20MPs/Final%20Project/Emulator
+* https://github.com/telos27/rvsim
+* https://github.com/sanjayseshan/mini-rv32ima-baremetal
+* https://github.com/hexadevti/emu8
+* https://github.com/g91/MaTouch-ESP32-P4-TFTTouch-10.1-OS/tree/main/sdk/examples
+* https://github.com/DnCraptor/murm386
+* https://github.com/rh1tech/frank-386
+* https://github.com/zhangjiantao/tcmips/tree/main/demo
+* 
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
@@ -147,4 +168,13 @@ cnlohr/mini-rv32ima
 我还以为必须和dtc的内存值一样，但这样会比m5stack tab5的psram大小更大，
 导致无法运行，但其实可以小于dtc/dts内存配置的64M
 （我用的是16M，实际psram是32MB）
+
+m5stack tab5 esp32-p4 mini-rv32ima研究。我似乎找到方法解决对于这代码而言idf.py monitor
+回车才回显的问题——不过我是自己想的方法（其实搜ReadKBByte会找到很多类似的linux串口repl项目）。
+简单来说，我的解决办法是把模拟器串口的输出实现printf换成esp32-p4自己的串口输出——
+不过好像这里不能用uart_函数（可能和usb_serial_jtag重复导致无法输出，除非不是串口0而是串口1之类），
+只能用usb_serial_jtag_write_bytes。其实我怀疑是因为printf和usb_serial_jtag
+不是用同一个缓冲导致这种无法flush的问题，但具体是不是这个原因我就不知道了，
+我打算实现到随便能用就行，
+虽然改成这样也可能会导致卡顿，但我觉得无所谓了
 ```
