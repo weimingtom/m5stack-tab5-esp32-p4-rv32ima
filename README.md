@@ -15,6 +15,7 @@
 * https://docs.waveshare.com/ESP32-P4
 
 ## TODO
+* https://github.com/search?q=ReadKBByte+esp&type=code  
 * 简化sdkconfig并写入sdkconfig.defaults
 * m5stack tab5 (esp32-p4) command input successfully, but no echo (echo after pressing enter)    
 * https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/rv32ima-mingw/esp32p4-rv32ima/todo.txt  
