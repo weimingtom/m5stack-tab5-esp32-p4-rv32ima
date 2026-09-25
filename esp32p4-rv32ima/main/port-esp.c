@@ -16,6 +16,68 @@
 #include "esp_partition.h"
 #include "hal/usb_serial_jtag_ll.h"
 #include "psram.h"
+#include "driver/uart.h" //added, for uart_read_bytes() and uart_get_buffered_data_len()
+
+//see also https://github.com/hchunhui/tiny386/blob/master/misc.c
+//see CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
+#define USE_ESP_UART 1
+
+#include "esp_log.h"
+#include "driver/usb_serial_jtag.h"
+#define BUF_SIZE (1024)
+uint8_t *data;
+static void echo_task(void *arg)
+{
+    // Configure USB SERIAL JTAG
+    usb_serial_jtag_driver_config_t usb_serial_jtag_config = {
+        .rx_buffer_size = BUF_SIZE,
+        .tx_buffer_size = BUF_SIZE,
+    };
+
+    ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&usb_serial_jtag_config));
+    ESP_LOGI("usb_serial_jtag echo", "USB_SERIAL_JTAG init done");
+
+    // Configure a temporary buffer for the incoming data
+    data = (uint8_t *) malloc(BUF_SIZE);
+    if (data == NULL) {
+        ESP_LOGE("usb_serial_jtag echo", "no memory for data");
+        return;
+    }
+#if 0
+    while (1) {
+
+        int len = usb_serial_jtag_read_bytes(data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
+
+        // Write data back to the USB SERIAL JTAG
+        if (len) {
+            usb_serial_jtag_write_bytes((const char *) data, len, 20 / portTICK_PERIOD_MS);
+            data[len] = '\0';
+            ESP_LOG_BUFFER_HEXDUMP("Recv str: ", data, len, ESP_LOG_INFO);
+        }
+    }
+#endif	
+}
+
+
+static void configure_uarts() {
+#if 0	
+	uart_config_t uart_config = {
+		.baud_rate = 115200,
+		.data_bits = UART_DATA_8_BITS,
+		.parity	= UART_PARITY_DISABLE,
+		.stop_bits = UART_STOP_BITS_1,
+		.flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+		.source_clk = UART_SCLK_DEFAULT,
+	};
+
+	uart_param_config(UART_NUM_0, &uart_config);
+	if (uart_driver_install(UART_NUM_0, 2 * 1024, 0, 0, NULL, 0) != ESP_OK) {
+		assert(false);
+	}
+#else
+	echo_task(NULL);
+#endif	
+}
 
 uint64_t GetTimeMicroseconds()
 {
@@ -24,6 +86,7 @@ uint64_t GetTimeMicroseconds()
 
 int ReadKBByte(void)
 {
+#if !USE_ESP_UART	
 	uint8_t rxchar;
 	int rread;
 
@@ -33,11 +96,58 @@ int ReadKBByte(void)
 		return rxchar;
 	else
 		return -1;
+#else
+
+	
+/*
+	char data;
+	if (uart_read_bytes(0, &data, 1, 20 / portTICK_PERIOD_MS) > 0) {
+		return data;
+	}
+	return -1;
+*/
+	if (data && strlen((const char *)data) > 0) {
+		uint8_t result = data[0];
+		data[0] = '\0';
+		return result;
+	}
+	return -1;
+#endif	
 }
 
 int IsKBHit(void)
 {
+#if !USE_ESP_UART
 	return usb_serial_jtag_ll_rxfifo_data_available();
+#else
+/*
+	size_t len;
+	if (uart_get_buffered_data_len(0, &len) == ESP_OK) {
+		if (len)
+			return 1;
+	}
+	return 0;
+*/
+    if (data && strlen((const char *)data) > 0) {
+		return 1;
+	}
+	//FIXME: if 2 / portTICK_PERIOD_MS is too large, it will be very slow 
+	int len = usb_serial_jtag_read_bytes(data, (BUF_SIZE - 1), 2 / portTICK_PERIOD_MS);
+	if (len) {
+		//usb_serial_jtag_write_bytes((const char *) data, len, 2 / portTICK_PERIOD_MS);
+        //ESP_LOGE("usb_serial_jtag_read_bytes", "%02X", (uint8_t)data[0]);
+		//printf("%c", (uint8_t)data[0]); fflush(stdout);
+#if 0
+//no need, if use usb_serial_jtag_write_bytes in uc-rv32ima.c:HandleControlStore()
+		usb_serial_jtag_write_bytes((const char *) data, 1, 2 / portTICK_PERIOD_MS);
+        usb_serial_jtag_write_bytes("\b", 1, 2 / portTICK_PERIOD_MS);
+		usb_serial_jtag_ll_txfifo_flush();
+#endif
+		data[len] = '\0';
+		return 1;
+	}
+	return 0;
+#endif
 }
 
 static uint8_t *psram_base = NULL;
@@ -79,6 +189,10 @@ int psram_init(void)
 	memset(psram_base, 0, psram_size);
 	printf("PSRAM initialized successfully!\n");
 
+#if USE_ESP_UART	
+	configure_uarts();
+#endif
+	
 	return 0;
 }
 

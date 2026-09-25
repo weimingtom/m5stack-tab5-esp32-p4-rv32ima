@@ -19,12 +19,6 @@
 #include "cache.h"
 #include "psram.h"
 
-
-#include "hal/usb_serial_jtag_ll.h"
-#include "driver/usb_serial_jtag.h"
-
-
-
 static int trap_nesting_level = 0;
 static uint32_t last_trap_pc[10] = {0};
 static int trap_pc_idx = 0;
@@ -359,16 +353,8 @@ static uint32_t HandleControlStore( uint32_t addy, uint32_t val )
 #if 1
 	if( addy == 0x10000000 ) //UART 8250 / 16550 Data Buffer
 	{
-#if 0		
 		printf( "%c", (int)val );
 		fflush( stdout );
-#else
-		char data[2] = {0};
-		data[0] = (char)val;
-		usb_serial_jtag_write_bytes((const char *) data, 1, 2 / portTICK_PERIOD_MS);
-        //usb_serial_jtag_write_bytes("\b", 1, 2 / portTICK_PERIOD_MS);
-		usb_serial_jtag_ll_txfifo_flush();
-#endif		
 	}
 	return 0;
 #else
