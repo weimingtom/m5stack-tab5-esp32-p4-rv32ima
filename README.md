@@ -129,7 +129,16 @@ https://bokuweb.github.io/r2/
 * https://github.com/DnCraptor/murm386
 * https://github.com/rh1tech/frank-386
 * https://github.com/zhangjiantao/tcmips/tree/main/demo
-* 
+* https://github.com/simh/simh
+* ESP32-based PDP11 simulator, based on SimH    
+* https://github.com/spritetm/esppdp  
+* https://zhuanlan.zhihu.com/p/347769247
+* pdp11-js  
+* http://takahirox.github.io/pdp11-js/unixv6.html
+* np2kai
+* https://github.com/mochimochi-man/np2_TAB5
+* https://github.com/reminon/np2kai_p4
+* https://github.com/AZO234/NP2kai
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
