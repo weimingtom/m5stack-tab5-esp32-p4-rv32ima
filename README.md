@@ -139,6 +139,10 @@ https://bokuweb.github.io/r2/
 * https://github.com/mochimochi-man/np2_TAB5
 * https://github.com/reminon/np2kai_p4
 * https://github.com/AZO234/NP2kai
+* The newest ESP32 can actually run Linux, and it’s getting uncomfortably close to a Raspberry Pi  
+https://blog.adafruit.com/2026/09/28/the-newest-esp32-can-actually-run-linux-and-its-getting-uncomfortably-close-to-a-raspberry-pi/  
+https://www.xda-developers.com/newest-esp32-run-linux-close-to-raspberry-pi/  
+https://github.com/espressif/esp-linux-bsp  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
