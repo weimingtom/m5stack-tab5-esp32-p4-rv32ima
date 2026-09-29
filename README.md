@@ -143,9 +143,6 @@ https://bokuweb.github.io/r2/
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
 
-## Some code about uart and usb_serial_jtag, but these will be removed  
-* https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/commit/d7a3dde68bc3ac693dbd7e028c2e1226b5f6be4c  
-
 ## ram_amt, minimal memory, linux kernel memory footprint, >= 16 * 1024 * 1024 (for mini-rv32ima_mod)  
 ```
 做Linux小电脑有门槛且很麻烦，目前最流行用f1c100s/f1c200s，
@@ -190,3 +187,6 @@ m5stack tab5 esp32-p4 mini-rv32ima研究。我似乎找到方法解决对于这�
 我打算实现到随便能用就行，
 虽然改成这样也可能会导致卡顿，但我觉得无所谓了
 ```
+
+## Some code about uart and usb_serial_jtag, but these will be removed  
+* https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/commit/d7a3dde68bc3ac693dbd7e028c2e1226b5f6be4c  
