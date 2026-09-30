@@ -12,5 +12,6 @@
 uint64_t GetTimeMicroseconds();
 int IsKBHit();
 int ReadKBByte();
+void writeUartConsole(uint32_t val);
 int load_images(int ram_size, int *kern_len);
 #endif /* PORT_H */

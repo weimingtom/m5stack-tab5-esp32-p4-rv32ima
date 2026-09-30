@@ -53,6 +53,11 @@ uint64_t GetTimeMicroseconds()
 	return tv.tv_usec + ((uint64_t)(tv.tv_sec)) * 1000000LL;
 }
 
+void writeUartConsole(uint32_t val) {
+	printf( "%c", (int)val );
+	fflush( stdout );
+}
+
 int ReadKBByte(void)
 {
 	char rxchar;
