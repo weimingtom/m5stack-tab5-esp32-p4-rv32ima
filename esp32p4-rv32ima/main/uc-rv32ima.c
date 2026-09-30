@@ -326,11 +326,11 @@ static uint32_t HandleControlLoad( uint32_t addy )
 		}
 	}
 
-	switch (addy) {
-        case 0x10000004: return uart_mcr;
-        case 0x10000006: return 0x00;
-        case 0x10000007: return uart_scratch;
-	}
+//	switch (addy) {
+//        case 0x10000004: return uart_mcr;
+//        case 0x10000006: return 0x00;
+//        case 0x10000007: return uart_scratch;
+//	}
 	
 	return 0;
 }

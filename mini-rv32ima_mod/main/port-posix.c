@@ -86,6 +86,11 @@ uint64_t GetTimeMicroseconds()
 #endif
 }
 
+void writeUartConsole(uint32_t val) {
+	printf( "%c", (int)val );
+	fflush( stdout );
+}
+
 int ReadKBByte(void)
 {
 #if 1 //!defined(__MINGW32__)

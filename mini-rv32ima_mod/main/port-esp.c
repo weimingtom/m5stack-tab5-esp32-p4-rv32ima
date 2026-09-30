@@ -16,28 +16,108 @@
 #include "esp_partition.h"
 #include "hal/usb_serial_jtag_ll.h"
 #include "psram.h"
+#include "esp_log.h"
+#include "driver/usb_serial_jtag.h"
+
+#define USE_THREAD 1
+static uint64_t lastHit = 0;
+#define BUF_SIZE (1024)
+static uint8_t *data;
+#if USE_THREAD
+void uart_event_task(void *pvParameters) {
+    while (1) {
+        //int len = uart_read_bytes(UART_PORT_NUM, data, sizeof(data), pdMS_TO_TICKS(10));
+        //if (len > 0) {
+        //    printf("Received %d bytes\n", len);
+        //}
+		
+		if (data) {
+			if (data[0]) {
+				//stop reading usb_serial_jtag
+			} else {
+				int len = usb_serial_jtag_read_bytes(data, (BUF_SIZE - 1), pdMS_TO_TICKS(1)); //don't be too long
+				if (len) {
+					data[len] = '\0';
+				}
+			}
+		}
+		
+        vTaskDelay(pdMS_TO_TICKS(10)); //don't be too short, or it will block the main thread
+    }
+}
+#endif
+static void initUartConsole() {
+	lastHit = esp_timer_get_time();
+	// Configure USB SERIAL JTAG
+    usb_serial_jtag_driver_config_t usb_serial_jtag_config = {
+        .rx_buffer_size = BUF_SIZE,
+        .tx_buffer_size = BUF_SIZE,
+    };
+
+    ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&usb_serial_jtag_config));
+    ESP_LOGI("usb_serial_jtag echo", "USB_SERIAL_JTAG init done");
+
+    // Configure a temporary buffer for the incoming data
+    data = (uint8_t *) malloc(BUF_SIZE);
+    if (data == NULL) {
+        ESP_LOGE("usb_serial_jtag echo", "no memory for data");
+        return;
+    }
+	data[0] = 0;
+#if USE_THREAD
+	xTaskCreate(uart_event_task, "uart_event_task", 4096, NULL, 10, NULL);
+#endif	
+}
 
 uint64_t GetTimeMicroseconds()
 {
 	return esp_timer_get_time();
 }
 
+void writeUartConsole(uint32_t val) {
+	char data[2] = {0};
+	data[0] = (char)val;
+	usb_serial_jtag_write_bytes((const char *) data, 1, 1 / portTICK_PERIOD_MS);
+	//usb_serial_jtag_write_bytes("\b", 1, 2 / portTICK_PERIOD_MS);
+	usb_serial_jtag_ll_txfifo_flush();
+}
+
 int ReadKBByte(void)
 {
-	uint8_t rxchar;
-	int rread;
-
-	rread = usb_serial_jtag_ll_read_rxfifo(&rxchar, 1);
-
-	if (rread > 0)
-		return rxchar;
-	else
-		return -1;
+	if (data && data[0]) { //strlen((const char *)data) > 0) {
+		uint8_t result = data[0];
+		data[0] = '\0';
+		return result;
+	}
+	return -1;
 }
 
 int IsKBHit(void)
 {
-	return usb_serial_jtag_ll_rxfifo_data_available();
+    if (data && data[0]) { //strlen((const char *)data) > 0) {
+		return 1;
+	}
+#if USE_THREAD
+	//skip
+#else	
+	if (esp_timer_get_time() - lastHit < 100 * 1000) {  //about 239725;
+		return 0; //cache, make faster, skip read
+	} else {
+		lastHit = esp_timer_get_time();
+	}
+		
+	//FIXME: if 2 / portTICK_PERIOD_MS is too large, it will be very slow 
+	int len = usb_serial_jtag_read_bytes(data, (BUF_SIZE - 1), 1 / portTICK_PERIOD_MS);
+	if (len) {
+		//printf("[delta=%d]", (int)(esp_timer_get_time() - lastHit)); //about 239725;
+		//fflush(stdout);
+		
+		lastHit = esp_timer_get_time();
+		data[len] = '\0';
+		return 1;
+	}
+#endif
+	return 0;
 }
 
 /*static*/ uint8_t *psram_base = NULL;
@@ -79,6 +159,8 @@ int psram_init(void)
 	memset(psram_base, 0, psram_size);
 	printf("PSRAM initialized successfully!\n");
 
+	initUartConsole();
+	
 	return 0;
 }
 
@@ -146,7 +228,7 @@ void verify_kernel_header(void)
 		header[0x34] == 'V') {
 		printf("✓ RISCV magic found at offset 0x30\n");
 		} else {
-			printf("✗ RISCV magic NOT found! Expected at 0x30\n");
+			printf("✗ RISCV magic NOT found! Expected at 0x30, please run: esptool.py --chip esp32p4 -b 921600 write_flash 0x110000 main/DownloadedImage\n");
 		}
 
 		uint32_t first_instr = *(uint32_t*)header;
