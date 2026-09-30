@@ -303,74 +303,37 @@ static uint8_t uart_lcr = 0;
 static uint8_t uart_mcr = 0;
 static uint8_t uart_fcr = 0;
 
-#if 0
-//original, but I don't know why it doesn't work
 
-static uint32_t HandleControlStore(uint32_t addy, uint32_t val)
-{
-    switch (addy) {
-        case 0x10000000:
-            if (uart_lcr & 0x80) uart_divisor = (uart_divisor & 0xFF00) | (val & 0xFF);
-            else { printf("%c", (int)val); fflush(stdout); }
-            break;
-        case 0x10000001:
-            if (uart_lcr & 0x80) uart_divisor = (uart_divisor & 0x00FF) | ((val & 0xFF) << 8);
-            else uart_ier = val;
-            break;
-        case 0x10000002: uart_fcr = val; break;
-        case 0x10000003: uart_lcr = val; break;
-        case 0x10000004: uart_mcr = val; break;
-        case 0x10000007: uart_scratch = val; break;
-    }
-    return 0;
-}
-
-
-
-static uint32_t HandleControlLoad(uint32_t addy)
-{
-    switch (addy) {
-        case 0x10000000:
-printf("========HandleControlLoad=========\n");		
-            if (uart_lcr & 0x80) return uart_divisor & 0xFF;
-            return IsKBHit() ? ReadKBByte() : 0;
-        case 0x10000001:
-            if (uart_lcr & 0x80) return (uart_divisor >> 8) & 0xFF;
-            return uart_ier;
-        case 0x10000002: return 0xC1;
-        case 0x10000003: return uart_lcr;
-        case 0x10000004: return uart_mcr;
-        case 0x10000005: return 0x60 | (IsKBHit() ? 1 : 0);
-        case 0x10000006: return 0x00;
-        case 0x10000007: return uart_scratch;
-    }
-    return 0;
-}
-#else
-//copy from mini-rv32ima.c, but  I don't know why it works ?
 static uint32_t HandleControlStore( uint32_t addy, uint32_t val )
 {
 	if( addy == 0x10000000 ) //UART 8250 / 16550 Data Buffer
 	{
-		printf( "%c", (int)val );
-		fflush( stdout );
+		writeUartConsole(val);
 	}
 	return 0;
 }
 
 
+
 static uint32_t HandleControlLoad( uint32_t addy )
 {
-//printf("========HandleControlLoad=========\n");	
 	// Emulating a 8250 / 16550 UART
-	if( addy == 0x10000005 )
-		return 0x60 | IsKBHit();
-	else if( addy == 0x10000000 && IsKBHit() )
-		return ReadKBByte();
+	if( addy == 0x10000005 ) {
+	    return 0x60 | IsKBHit();
+	} else if( addy == 0x10000000) {
+		if (IsKBHit()) {
+			return ReadKBByte();
+		}
+	}
+
+	switch (addy) {
+        case 0x10000004: return uart_mcr;
+        case 0x10000006: return 0x00;
+        case 0x10000007: return uart_scratch;
+	}
+	
 	return 0;
 }
-#endif
-
 
 
 

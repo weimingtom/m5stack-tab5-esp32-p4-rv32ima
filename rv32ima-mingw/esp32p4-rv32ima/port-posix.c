@@ -22,13 +22,17 @@
 extern struct MiniRV32IMAState core;
 extern void DumpState(struct MiniRV32IMAState *core);
 extern void app_main(void);
-#if 0 //!defined(__MINGW32__)
+#if !defined(__MINGW32__)
 extern char kernel_start[], kernel_end[];
 #else
 static char *kernel_start, *kernel_end;
 #endif
 
+#if !defined(__MINGW32__)
+#define USE_RAM_FILE   1
+#else
 #define USE_RAM_FILE   0
+#endif
 #if USE_RAM_FILE
 static int ramfd;
 #endif
@@ -87,6 +91,11 @@ uint64_t GetTimeMicroseconds()
 	QueryPerformanceCounter( &li );
 	return ((uint64_t)li.QuadPart * 1000000LL) / (uint64_t)lpf.QuadPart;	
 #endif
+}
+
+void writeUartConsole(uint32_t val) {
+	printf( "%c", (int)val );
+	fflush( stdout );
 }
 
 int ReadKBByte(void)
