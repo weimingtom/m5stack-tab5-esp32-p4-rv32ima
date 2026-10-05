@@ -152,6 +152,10 @@ https://github.com/weimingtom/wmt_uclinux_study
 (TODO) jaty68k.zip, jaty68k java project  
 https://github.com/jscrane/r65emu  
 https://github.com/weimingtom/mini-rv32ima_fork  
+* https://github.com/weimingtom/wmt_mips_study  
+virtualmips-0.01_run_success_need_libelf-dev.tar.gz  
+https://sourceforge.net/projects/virtualmips/files/virtualmips/version%200.06/  
+https://github.com/OpenNoah/virtualnoah  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
