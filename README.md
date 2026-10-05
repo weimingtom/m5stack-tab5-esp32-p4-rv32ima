@@ -143,6 +143,12 @@ https://bokuweb.github.io/r2/
 https://blog.adafruit.com/2026/09/28/the-newest-esp32-can-actually-run-linux-and-its-getting-uncomfortably-close-to-a-raspberry-pi/  
 https://www.xda-developers.com/newest-esp32-run-linux-close-to-raspberry-pi/  
 https://github.com/espressif/esp-linux-bsp  
+* https://github.com/weimingtom/68katy-musashi_fork  
+https://github.com/eparadis/68katy-musashi  
+68katy-musashi_mingw_v1_success.7z  
+68katy-musashi_ubuntu140432_retrobsd_success_make_run.tar.gz  
+https://github.com/weimingtom/wmt_uclinux_study  
+jaty68k_cpp_v3.7z  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
