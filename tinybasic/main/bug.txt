@@ -1,0 +1,6 @@
+FIXME: bug:
+
+a = 100
+print a //output 100
+print aa //output 100
+print aaa //output 100
