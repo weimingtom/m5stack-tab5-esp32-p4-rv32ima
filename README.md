@@ -148,10 +148,10 @@ https://github.com/eparadis/68katy-musashi
 68katy-musashi_mingw_v1_success.7z  
 68katy-musashi_ubuntu140432_retrobsd_success_make_run.tar.gz  
 https://github.com/weimingtom/wmt_uclinux_study  
-jaty68k_cpp_v3.7z  
+(TODO) jaty68k_cpp_v3.7z, jaty68k_cpp_v6_ADDA.7z, not good, need to be re-translated with AI and jaty68k.zip below.         
+(TODO) jaty68k.zip, jaty68k java project  
 https://github.com/jscrane/r65emu  
 https://github.com/weimingtom/mini-rv32ima_fork  
-(? TODO) jaty68k java project  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
