@@ -1,0 +1,11 @@
+*.o
+.vscode
+
+
+sim
+
+# generated files
+#m68kops.c
+#m68kops.h
+#m68kmake
+
