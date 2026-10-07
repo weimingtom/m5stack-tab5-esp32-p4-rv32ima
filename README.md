@@ -15,7 +15,14 @@
 * https://docs.waveshare.com/ESP32-P4
 
 ## TODO
-* (BUG) tinybasic p4 version, backspace key does not delete the text characters  
+* (BUG) tinybasic p4 version, backspace key does not delete the text characters
+* (BUG) https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/tinybasic/main/bug.txt  
+```
+a = 100
+print a //output 100
+print aa //output 100
+print aaa //output 100
+```
 * https://github.com/search?q=ReadKBByte+esp&type=code  
 * 简化sdkconfig并写入sdkconfig.defaults
 * m5stack tab5 (esp32-p4) command input successfully, but no echo (echo after pressing enter)    
