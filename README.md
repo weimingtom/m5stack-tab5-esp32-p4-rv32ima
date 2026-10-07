@@ -167,6 +167,17 @@ https://github.com/OpenNoah/virtualnoah
 * tinybasic  
 https://github.com/weimingtom/mt300nv2_playground/blob/master/tinybasic-pmachapman/tinybasic.c   
 https://github.com/weimingtom/mt300nv2_playground/blob/master/tinybasic_cpp/tinybasic.cpp   
+* weimingtom-lua514arduino-master.zip, https://gitee.com/weimingtom/lua514arduino/blob/master/lua/lua.ino    
+```
+试了一下arduino上编译lua 5.1.4，这次自己裁剪了，把lua库和ltm删除，轻松地在arduino mega上成功运行hello程序。
+好吧，我承认其实lua 5.1.4比lua 1.0更容易跑在arduino mega 2560上。。。lua 5.1.4是61688字节程序/2410字节全局变量，
+而lua 1.0是24972字节程序，7732字节全局变量 ​​​
+```
+Demo_lua514_v1_failed.rar  
+lua1arduino_v3_arduino_success.rar  
+lua_arduino_v3_failed.rar  
+luaarduino_ide_v1.rar  
+lua-arduino_ori.rar, https://github.com/JohnMH/lua-arduino   
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
