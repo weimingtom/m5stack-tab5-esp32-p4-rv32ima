@@ -1,0 +1,15 @@
+Lua 5.1.4
+> return 12,34
+34
+
+
+================
+
+
+> fasdf123423asdfasdf
+xpected near '<eof>'
+
+
+=================
+
+some codes are different
