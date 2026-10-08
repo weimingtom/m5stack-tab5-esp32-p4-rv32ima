@@ -15,6 +15,7 @@
 * https://docs.waveshare.com/ESP32-P4
 
 ## TODO
+* (BUG) https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/lua514arduino/bug001.txt  
 * (BUG) tinybasic p4 version, backspace key does not delete the text characters
 * (BUG) https://github.com/weimingtom/m5stack-tab5-esp32-p4-rv32ima/blob/master/tinybasic/main/bug.txt  
 ```
