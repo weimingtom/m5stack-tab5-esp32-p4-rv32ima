@@ -178,6 +178,7 @@ lua1arduino_v3_arduino_success.rar
 lua_arduino_v3_failed.rar  
 luaarduino_ide_v1.rar  
 lua-arduino_ori.rar, https://github.com/JohnMH/lua-arduino   
+* (i8080) https://github.com/maly/arduino8080basic    
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
