@@ -183,6 +183,9 @@ lua-arduino_ori.rar, https://github.com/JohnMH/lua-arduino
 * https://github.com/drorgl/esp32-tinyemu    
 * https://github.com/Spritetm/esppdp  
 https://github.com/Isysxp/esppdp  
+* ELKS  
+https://github.com/ghaerr/elks    
+https://www.bilibili.com/video/BV1yP4G6GEi6/    
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
