@@ -1,0 +1,137 @@
+tiny386怎么编译‌
+
+tiny386 的编译方式取决于你想用哪个平台和哪个显示后端‌，最常用的桌面 Linux 无界面版本一行命令就能编出来。
+
+🖥️ 桌面 Linux 编译
+‌无界面 headless 版‌：最简单，直接跑：
+
+bash
+gcc -O3 *.c -o tiny386_headless -lm
+编出来的可执行文件不输出画面，适合跑无头任务或配合 -term 看文本输出。‌‌
+
+‌图形界面版（rawdraw 后端）‌：需要安装依赖 libslirp、libx11、libasound2，然后：
+
+bash
+make
+这是默认构建，带 NE2000 网卡和 slirp 网络支持。‌‌
+
+‌SDL 后端‌：安装 SDL1.2 或 sdl12-compat 后：
+
+bash
+make USE_SDL=y
+适合喜欢 SDL 窗口环境的场景。‌‌
+
+🪟 Windows 编译
+用 mingw-w64 工具链，执行：
+
+bash
+make win32
+会额外链接 -lws2_32 和 -liphlpapi 这两个网络相关库。‌‌
+
+🌐 WebAssembly 编译
+需要 clang，进入 wasm/ 目录后：
+
+bash
+cd wasm && make
+编完可以在浏览器里跑，页面资源在 wasm/html/ 下。‌‌
+
+📟 ESP32 交叉编译
+在 x86_64 的 PC 上为 ESP32 编译，需要先准备 ESP-IDF 环境，然后：
+
+bash
+make prepare
+cd esp
+idf.py -DBOARD=jc3248w535 update-dependencies build
+idf.py flash
+编译成功后会在 build/ 目录生成 tiny386.bin 等固件文件。所有配置（ini + bios + 镜像）放到 FAT/exFAT 格式的 SD 卡根目录，ini 必须命名为 tiny386.ini。‌‌
+
+⚠️ 为 mipsel 平台编译
+有开发者基于 tiny386 做了终端版修改，去掉 SDL 图形库依赖，改用 80×25 VGA 文本终端显示和终端输入。关键步骤是：
+
+拉取源码后‌删除 kvm.c 和 kvm.h‌（mipsel 不支持 KVM）
+修改 main.c，加入终端刷新回调和 stdin 非阻塞键盘输入
+用交叉编译工具链编译，不链接 SDL 库
+这个移植方案主要面向 OpenWrt-mipsel 这类嵌入式轻量平台，目的是节约运行资源。‌‌
+
+🔧 编译选项速查
+表格
+目标平台	依赖	命令
+Linux headless	无额外依赖	gcc -O3 *.c -o tiny386_headless -lm
+Linux rawdraw	libslirp、libx11、libasound2	make
+Linux SDL	SDL1.2 或 sdl12-compat	make USE_SDL=y
+Windows	mingw-w64	make win32
+WebAssembly	clang	cd wasm && make
+ESP32	ESP-IDF	idf.py build
+编译完还需要准备 bios.bin、vgabios.bin（seabios 固件）和系统镜像，再用 ini 配置文件启动，比如 ./tiny386 win98.ini。‌‌
+
+编译完成后，启动配置也很关键，可以看看bios.bin 和 vgabios.bin 有什么区别?或者win98.ini 配置文件包含哪些内容?
+
+
+==========
+tiny386怎么运行
+
+‌tiny386 的运行方式取决于你想跑在 PC 上还是 ESP32 开发板上‌，两种场景的步骤完全不同，下面分别说明。
+
+💻 在 PC 上运行
+‌获取源码并编译‌：克隆仓库后，最简编译只需一条命令，生成无界面（headless）版本：
+
+bash
+gcc -O3 *.c -o tiny386_headless -lm
+想要图形窗口和声音，按平台选择：Linux 用 make（需装 libslirp、libx11、libasound2），Windows 用 make win32（需装 mingw-w64）。‌‌
+
+‌准备 ini 配置文件‌：tiny386 用 ini 文件描述虚拟 PC 的硬件配置。仓库 conf/ 目录自带 win98.ini、winxp.ini 等现成示例，可直接参考修改。一份典型的 Win9x 配置长这样：
+
+ini
+[pc]
+bios = bios.bin
+vga_bios = vgabios.bin
+mem_size = 32M
+vga_mem_size = 2M
+hda = win95.img
+fill_cmos = 1
+[display]
+width = 720
+height = 480
+[cpu]
+gen = 4
+fpu = 0
+Win9x 用 gen = 3~4、fpu = 0 即可；WinXP 这类 NT 内核系统建议 gen = 5、fpu = 1、mem_size = 128M、fill_cmos = 0。‌‌
+
+‌运行‌：把 bios.bin、vgabios.bin（SeaBIOS 固件）和系统镜像放到当前目录，然后执行：
+
+bash
+./tiny386 win98.ini
+
+text
+图形版快捷键：`Ctrl + ]` 捕获/释放键鼠焦点，`Ctrl + [` 显示/隐藏 OSD 菜单。‌‌:ml-citation{ref="2" appearance="aggregated" data="citationList"}
+
+### 🔌 在 ESP32 开发板上运行
+
+1. &zwnj;**支持的开发板**&zwnj;：JC3248W535（ESP32-S3，480x320）、Elecrow CrowPanel Advance 7.0"（ESP32-S3，800x480），以及实验性的 JC4880P443（ESP32-P4）。‌‌:ml-citation{ref="2,4" appearance="aggregated" data="citationList"}
+
+2. &zwnj;**编译与烧录**&zwnj;：需安装 ESP-IDF 5.2.x（P4 板用 6.0.x），然后执行：
+```bash
+make prepare
+cd esp
+idf.py -DBOARD=jc3248w535 update-dependencies build
+idf.py flash
+不想编译的话，可直接从 Release 页下载预构建镜像整包烧录。‌‌
+
+‌准备 SD 卡‌：把 BIOS、系统镜像等文件放到 FAT/exFAT 格式的 SD 卡根目录，ini 文件必须命名为 tiny386.ini（模板参考 esp/tiny386.ini）。上电即可看到 Windows 95 开机画面。‌‌
+
+‌键鼠输入‌：二选一，不能同时启用：
+
+‌WiFi 转发‌（主力方案）：在 ini 的 [esp] 段配置 ssid 和 pass，然后在 PC 上运行 ./wifikbd <开发板IP> 9999，即可用 PC 键鼠操作开发板上的系统。
+‌USB HID‌（实验性）：ini 中加 enable_usb = 1，直接用 USB 线接键鼠。‌‌
+⚠️ 常见坑点
+‌Win95 安装时报 "0 bytes of memory"‌：用 setup /im 绕过内存检测。
+‌Win9x 启动时 "protection error"‌：使用 patcher9x 工具打补丁。
+‌NT/2000/XP 启动卡死‌：把配置改为 fill_cmos = 0。
+‌ESP32 上 bootloop 反复重启‌：调小 mem_size / vga_mem_size，参考 esp/tiny386.ini 的 7568K / 320K 保守值。
+‌NE2000 网卡不工作‌：在系统中手动把 IRQ 设为 9（或 2）。‌‌
+项目主页在 GitHub：hchunhui/tiny386，README 里有更详细的构建说明和配置项列表。‌‌
+
+配置细节挺多的，要不要继续看看为什么Win9x要用gen=3~4?或者WiFi转发和USB HID有何区别?
+
+
+
