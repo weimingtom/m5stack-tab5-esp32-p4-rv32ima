@@ -51,6 +51,9 @@ test: tiny386_headless
 test_data/rootfs.img:
 	unzip test_data/rootfs.zip -d test_data
 
+test2: tiny386_headless
+	(cd test_data_gray386linux;../tiny386_headless ./tiny386.ini;)
+
 clean:
 	$(RM) ./tiny386_headless *.exe $(OBJS) 
 #test_data/rootfs.img
