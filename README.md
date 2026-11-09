@@ -188,6 +188,7 @@ https://github.com/ghaerr/elks
 https://www.bilibili.com/video/BV1yP4G6GEi6/    
 * https://github.com/weimingtom/mt300nv2_playground/tree/master/ascii-invaders   
 ncurses  
+* https://github.com/marmolak/gray386linux
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
