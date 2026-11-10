@@ -6,6 +6,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#if defined(__MINGW32__)
+extern int g_enable_term;
+#endif
+
 #if defined(USE_AMD64)
 static void raise_irq_amd64(void *o, PicState2 *s)
 {
@@ -274,6 +278,9 @@ static u8 pc_io_read(void *o, int addr)
 		emulink_data_read_string(pc->emulink, &val, 1, 1);
 		return val;
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return 0xff;
+#endif
 		//fprintf(stderr, "in 0x%x <= 0x%x\n", addr, 0xff);
 		return 0xff;
 	}
@@ -306,6 +313,9 @@ static u16 pc_io_read16(void *o, int addr)
 	case 0x220:
 		return adlib_read(pc->adlib, addr);
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return 0xffff;
+#endif
 		fprintf(stderr, "inw 0x%x <= 0x%x\n", addr, 0xffff);
 		return 0xffff;
 	}
@@ -334,6 +344,9 @@ static u32 pc_io_read32(void *o, int addr)
 		val = emulink_status_read(pc->emulink);
 		return val;
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return 0xffffffff;
+#endif
 		fprintf(stderr, "ind 0x%x <= 0x%x\n", addr, 0xffffffff);
 	}
 	return 0xffffffff;
@@ -406,6 +419,9 @@ static void pc_io_write(void *o, int addr, u8 val)
 		vga_ioport_write(pc->vga, addr, val);
 		return;
 	case 0x402:
+#if defined(__MINGW32__)
+		if (g_enable_term) return;
+#endif
 		putchar(val);
 		fflush(stdout);
 		return;
@@ -497,6 +513,9 @@ static void pc_io_write(void *o, int addr, u8 val)
 		emulink_data_write_string(pc->emulink, &val, 1, 1);
 		return;
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return;
+#endif
 		fprintf(stderr, "out 0x%x => 0x%x\n", val, addr);
 		return;
 	}
@@ -534,6 +553,9 @@ static void pc_io_write16(void *o, int addr, u16 val)
 		ne2000_asic_ioport_write(pc->ne2000, addr, val);
 		return;
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return;
+#endif
 		fprintf(stderr, "outw 0x%x => 0x%x\n", val, addr);
 		return;
 	}
@@ -562,6 +584,9 @@ static void pc_io_write32(void *o, int addr, u32 val)
 		emulink_data_write(pc->emulink, val);
 		return;
 	default:
+#if defined(__MINGW32__)
+		if (g_enable_term) return;
+#endif
 		fprintf(stderr, "outd 0x%x => 0x%x\n", val, addr);
 		return;
 	}

@@ -799,7 +799,11 @@ static void vga_text_refresh(VGAState *s,
     uint32_t now = get_uticks();
     int blink_changed = 0;
     if (after_eq(now, s->cursor_blink_time)) {
+#if 1 //!defined(__MINGW32__)
         s->cursor_blink_time = now + 133333;
+#else
+        s->cursor_blink_time = now + 133333 * 5; //stop wrong position characters
+#endif
         s->cursor_visible_phase = !s->cursor_visible_phase;
         /* characters blink at half the cursor's rate, as on a VGA */
         if (s->cursor_visible_phase) {
@@ -814,10 +818,12 @@ static void vga_text_refresh(VGAState *s,
                 ((s->cr[0x07] & 0x02) << 7) |
                 ((s->cr[0x07] & 0x40) << 3);
             height = (height + 1) / cheight;
+#if 1
             s->vga_text_ops->refresh(
                 s->vga_text_obj,
                 s->vga_ram + start_addr * 4,
                 width, height);
+#endif
             s->term_refresh = 0;
         }
     }
@@ -1123,6 +1129,9 @@ static void vga_text_refresh(VGAState *s,
     }
 #endif
     redraw_func(opaque, 0, 0, fb_dev->width, fb_dev->height);
+#if defined(__MINGW32__)
+//    s->vga_text_ops->refresh(0, 0, fb_dev->width, fb_dev->height);
+#endif
 }
 
 static void vga_graphic_refresh(VGAState *s,

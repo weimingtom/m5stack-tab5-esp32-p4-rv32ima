@@ -28,6 +28,10 @@
 #include <inttypes.h>
 #include <assert.h>
 
+#if defined(__MINGW32__)
+extern int g_enable_term;
+#endif
+
 uint32_t get_uticks();
 static int after_eq(uint32_t a, uint32_t b)
 {
@@ -255,6 +259,9 @@ void kbd_write_command(void *opaque, uint32_t addr, uint32_t val)
         /* ignore that - I don't know what is its use */
         break;
     default:
+#if defined(__MINGW32__)
+		if (g_enable_term) break;
+#endif
         fprintf(stderr, "qemu: unsupported keyboard cmd=0x%02x\n", val);
         break;
     }
@@ -798,8 +805,15 @@ void ps2_write_keyboard(void *opaque, int val)
 void ps2_keyboard_set_translation(void *opaque, int mode)
 {
     PS2KbdState *s = (PS2KbdState *)opaque;
-    if (s->translate != mode)
+    if (s->translate != mode) {
+#if defined(__MINGW32__)
+if (!g_enable_term) {
+#endif
         fprintf(stderr, "i8042: use scancode set %d\n", mode ? 1 : 2);
+#if defined(__MINGW32__)
+}
+#endif
+	}
     s->translate = mode;
     s->translate_state = 0;
 }

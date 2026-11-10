@@ -18,10 +18,9 @@ struct Term {
 #include <sys/ioctl.h>
 #else
 #include <conio.h> //for _kbhit
-#endif
-
-#if defined(__MINGW32__)
-#define NO_CONTROL_STRING 1
+#include "pc.h" //for PC
+static void redraw_terminal2(void *opaque, int x, int y, int w, int h);
+static VGAState *g_vga = 0;
 #endif
 
 #define KEY_NONE        0x00
@@ -231,9 +230,9 @@ static void disable_raw_mode()
 {
 #if !defined(__MINGW32__)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
-#endif
 	const static char seq[] = "\x1b[?1l\x1b[?1049l\x1b[?25h";
 	write(STDIN_FILENO, seq, strlen(seq));
+#endif
 }
 
 static void enable_raw_mode()
@@ -250,9 +249,9 @@ static void enable_raw_mode()
 	raw.c_cc[VTIME] = 1;
 
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
-#endif
 	const static char seq[] = "\x1b[?1049h\x1b[?1h\x1b[?25h";
 	write(STDIN_FILENO, seq, strlen(seq));
+#endif
 }
 
 void term_step(Term *s)
@@ -301,13 +300,8 @@ void term_step(Term *s)
 }
 
 #include "vga.h"
-#if NO_CONTROL_STRING
-#define SET_CURSOR(a, b) do{}while(0)
-#define SET_ATTR(a, b) do{}while(0)
-#else
 #define SET_CURSOR(a, b) printf("\033[%d;%dH", a, b)
 #define SET_ATTR(a, b) printf("\033[%d;%dm", a, b)
-#endif
 #define FFLUSH() fflush(stdout)
 
 static const int cmap[16] = {
@@ -343,42 +337,46 @@ static void putchar_cp437(unsigned char cp437_char) {
 
 static void set_cursor(void *o, int y, int x)
 {
-#if NO_CONTROL_STRING
-	//if (x == 0) {
-	//	putchar_cp437('\n');
-	//}
-#endif
+#if !defined(__MINGW32__)
 	SET_CURSOR(y + 1, x + 1);
 	FFLUSH();
+#else
+printf("\033[?25l");  // hide cursor
+	SET_CURSOR(y + 1, x + 1);
+printf("\033[?25h");  // show cursor
+	FFLUSH();
+#endif
 }
 
 static void put_char2(void *o, int y, int x, int ch, int t)
 {
+#if !defined(__MINGW32__)
 	int fg = cmap[t & 0xf];
 	int bg = cmap[(t >> 4) & 0xf];
-#if !NO_CONTROL_STRING
 	printf("\0337\033[?25l");
-#endif
 	SET_CURSOR(y + 1, x + 1);
 	SET_ATTR(fg >= 8 ? 82 + fg : 30 + fg, bg >= 8 ? 92 + bg : 40 + bg);
-#if NO_CONTROL_STRING
-	if (x == 0) {
-		putchar_cp437('\n');
-	}
-#endif
 	putchar_cp437(ch);
-#if !NO_CONTROL_STRING
 	printf("\033[?25h\0338");
-#endif
 	FFLUSH();
+#else
+printf("\033[?25l");  // hide cursor
+	SET_CURSOR(y+1, x+1);
+	//if (y == 0) putchar('\n');
+	if (ch < 0x80) {
+		putchar(ch);
+	} else {
+		putchar(' ');//ch & 0x7F);
+	}
+printf("\033[?25h");  // show cursor
+	FFLUSH();
+#endif
 }
 
 static void refresh(void *o, const uint8_t *ram, int width, int height)
 {
-#if !NO_CONTROL_STRING
-#if !NO_CONTROL_STRING
+#if !defined(__MINGW32__)
 	printf("\0337\033[?25l");
-#endif
 	for (int i = 0; i < height; i++) {
 		SET_CURSOR(i + 1, 1);
 		for (int j = 0; j < width; j++) {
@@ -391,25 +389,11 @@ static void refresh(void *o, const uint8_t *ram, int width, int height)
 			putchar_cp437(ram[a1 * 4]);
 		}
 	}
-#if !NO_CONTROL_STRING
 	printf("\033[?25h\0338");
-#endif
 	FFLUSH();
 #else
-	printf("\033c"); //cls, clear
-	for (int i = 0; i < height; i++) {
-		//putchar_cp437('\r');
-		putchar_cp437('\n');
-		for (int j = 0; j < width; j++) {
-			uint32_t a1 = i * width + j;
-			int t = ram[a1 * 4 + 1];
-			int fg = cmap[t & 0xf];
-			int bg = cmap[(t >> 4) & 0xf];
-			SET_ATTR(fg >= 8 ? 82 + fg : 30 + fg,
-				 bg >= 8 ? 92 + bg : 40 + bg);
-			putchar_cp437(ram[a1 * 4]);
-		}
-	}
+	//redraw_terminal(g_vga, 0, 0, width, height);
+	redraw_terminal2((void *)ram, 0, 0, width, height);
 #endif
 }
 
@@ -425,12 +409,128 @@ Term *term_init(
 	void *kbd)
 {
 	Term *s = malloc(sizeof(Term));
+#if defined(__MINGW32__)
+	g_vga = vga;
+#endif
 	s->kbd_cb = kbd_cb;
 	s->kbd = kbd;
 	vga_set_text_ops(vga, &ops, NULL);
 	enable_raw_mode();
 	return s;
 }
+
+
+
+
+#if defined(__MINGW32__)
+//below code is copied from tiny386_net main.c
+
+#define VGA_COLS         60 //80
+#define VGA_ROWS         20 //25
+#define TERM_BUF_SZ      (VGA_COLS * (VGA_ROWS + 1000))//2)) //
+#define MIN_REFRESH_US   100000
+#define VGA_TEXT_OFFSET   0x18000
+
+static char vga_term_buf[TERM_BUF_SZ];
+static char vga_term_last[TERM_BUF_SZ];
+static uint32_t last_refresh_tick = 0;
+
+static uint16_t vga_text_read_char(VGAState *vga, int row, int col)
+{
+	uint32_t offset = VGA_TEXT_OFFSET + (row * VGA_COLS + col) * 2;
+	uint8_t ch  = vga_mem_read(vga, offset);
+	uint8_t attr= vga_mem_read(vga, offset + 1);
+	return ((uint16_t)attr << 8) | ch;
+}
+
+static void redraw_terminal2(void *opaque, int x, int y, int w, int h)
+{
+//printf("redraw_terminal\n");
+	//PC *pc = (PC*)opaque;
+	const uint8_t *ram = (const uint8_t *)opaque;
+	uint32_t now = get_uticks();
+
+	//if ((now - last_refresh_tick) < MIN_REFRESH_US)
+	//	return;
+
+	memset(vga_term_buf, 0, TERM_BUF_SZ);
+	int buf_off = 0;
+
+	for (int r = 0; r < VGA_ROWS /*h*/; r++) {
+		for (int c = 0; c < VGA_COLS /*w*/; c++) {
+			
+			uint32_t a1 = r * w + c;
+			int t = ram[a1 * 4 + 1];
+			int fg = cmap[t & 0xf];
+			int bg = cmap[(t >> 4) & 0xf];
+			uint8_t ch = (ram[a1 * 4]);
+			if (ch >= 0x20 && ch < 0x7F)
+				vga_term_buf[buf_off++] = ch;
+			else
+				vga_term_buf[buf_off++] = ' '; //ch;//
+			if (buf_off >= TERM_BUF_SZ - 2)
+				goto buf_end;
+		}
+		//vga_term_buf[buf_off++] = '\r';
+		vga_term_buf[buf_off++] = '\n';
+		if (buf_off >= TERM_BUF_SZ - 2)
+			goto buf_end;
+	}
+buf_end:
+	vga_term_buf[buf_off] = '\0';
+
+	//while (buf_off > 0 && (vga_term_buf[buf_off-1] == '\n' || vga_term_buf[buf_off-1] == ' '))
+	//	buf_off--;
+	//vga_term_buf[buf_off] = '\0';
+
+	if (strcmp(vga_term_buf, vga_term_last) != 0) {
+	
+		//fputs("\033[H\033[2J", stdout);
+		//printf("\033[2J\033[H"); //cls
+		printf("\033[2J\033[1;1H"); //fast cls
+		printf("\033[?25l");  // hide cursor
+		fputs(vga_term_buf, stdout);
+		printf("\033[?25h");  // show cursor
+		fflush(stdout);
+		strncpy(vga_term_last, vga_term_buf, TERM_BUF_SZ - 1);
+		vga_term_last[TERM_BUF_SZ - 1] = '\0';
+		last_refresh_tick = now;
+	} else {
+		//printf("\033[?25h");  // show cursor
+		//fflush(stdout);
+	}
+}
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #else
 #include <stdio.h>
 #include <stdlib.h>
@@ -447,3 +547,19 @@ void term_step(Term *s)
 {
 }
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

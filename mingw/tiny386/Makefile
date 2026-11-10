@@ -54,6 +54,9 @@ test_data/rootfs.img:
 test2: tiny386_headless
 	(cd test_data_gray386linux;../tiny386_headless ./tiny386.ini;)
 
+test3: tiny386_headless
+	(cd tiny386_net;../tiny386_headless -term ./test.ini;)
+
 clean:
 	$(RM) ./tiny386_headless *.exe $(OBJS) 
 #test_data/rootfs.img

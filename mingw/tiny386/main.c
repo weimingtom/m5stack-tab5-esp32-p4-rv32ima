@@ -67,6 +67,7 @@ int load_rom(void *phys_mem, const char *file, uword addr, int backward)
 static void redraw(void *opaque,
 		   int x, int y, int w, int h)
 {
+//printf("redraw\n");
 }
 
 #include "term.h"
@@ -99,6 +100,10 @@ static void set_sig_handler()
 #define set_sig_handler()
 #endif
 
+#if defined(__MINGW32__)
+int g_enable_term = 0;
+#endif
+
 int main(int argc, char *argv[])
 {
 	PCConfig conf;
@@ -110,16 +115,23 @@ int main(int argc, char *argv[])
 	conf.cpu_gen = 4;
 	conf.fpu = 0;
 
+#if defined(__MINGW32__)
+	g_enable_term = 1; //for no -term switch, close all debug output
+#endif
+
 	const char *argv1;
 	bool enable_kvm = false;
 	bool use_term = false;
 	if (argc > 1) {
 		for (int i = 1; i < argc - 1; i++) {
-			if (strcmp(argv[i], "-kvm") == 0)
+			if (strcmp(argv[i], "-kvm") == 0) {
 				enable_kvm = true;
-			else if (strcmp(argv[i], "-term") == 0)
+			} else if (strcmp(argv[i], "-term") == 0) {
 				use_term = true;
-			else {
+#if defined(__MINGW32__)
+				g_enable_term = 1;
+#endif
+			} else {
 				usage(argv[0]);
 				return 1;
 			}
