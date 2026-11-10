@@ -192,6 +192,7 @@ ncurses
 * https://blog.csdn.net/mjmujpukp/article/details/163749787    
 在终端运行x86 DOS，为mipsel编译tiny386   
 (baidupan) tiny386_net.zip  
+* https://github.com/zhangjiantao/tcmips/tree/main/demo/tiny386  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
