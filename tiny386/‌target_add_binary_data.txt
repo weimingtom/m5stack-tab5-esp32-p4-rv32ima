@@ -1,0 +1,63 @@
+target_add_binary_data(${COMPONENT_TARGET} "${CMAKE_SOURCE_DIR}/src/embed/favicon.ico" BINARY)
+target_add_binary_data(${COMPONENT_TARGET} "${CMAKE_SOURCE_DIR}/src/embed/upload_script.html" TEXT)
+
+ extern const uint8_t server_cert_pem_start[] asm("_binary_server_cert_pem_start");
+ extern const uint8_t server_cert_pem_start[] asm("_binary_server_cert_pem_start");
+   extern const unsigned char favicon_ico_start[] asm("_binary_favicon_ico_start");
+   extern const unsigned char favicon_ico_end[]   asm("_binary_favicon_ico_end");
+   extern const unsigned char upload_script_start[] asm("_binary_upload_script_html_start");
+   extern const unsigned char upload_script_end[]   asm("_binary_upload_script_html_end");
+   extern const unsigned char favicon_ico_start[] asm("_binary_favicon_ico_start");
+   extern const unsigned char favicon_ico_end[]   asm("_binary_favicon_ico_end");
+   extern const unsigned char upload_script_start[] asm("_binary_upload_script_html_start");
+   extern const unsigned char upload_script_end[]   asm("_binary_upload_script_html_end");
+
+Name	Line	Text
+web_server.cpp	66	   const size_t favicon_ico_size = (favicon_ico_end - favicon_ico_start);
+web_server.cpp	68	   httpd_resp_send(req, (const char *)favicon_ico_start, favicon_ico_size);
+
+Name	Line	Text
+web_server.cpp	154	   const size_t upload_script_size = (upload_script_end - upload_script_start);
+web_server.cpp	156	   httpd_resp_send_chunk(req, (const char *) upload_script_start, upload_script_size);
+
+
+
+================
+
+
+‌target_add_binary_data 是 ESP-IDF 构建系统提供的 CMake 函数，用于将任意文件直接嵌入到固件二进制中‌。嵌入后，文件内容会存放在 Flash 里，代码中通过链接器生成的符号直接获取其起始地址和结束地址，无需运行时从文件系统读取。‌
+
+📦 基本用法
+在组件的 CMakeLists.txt 中调用，将文件嵌入到组件库中：
+
+cmake
+target_add_binary_data(${COMPONENT_LIB} "path/to/file.bin" BINARY)
+‌第一个参数‌：目标名称，通常是 ${COMPONENT_LIB}，也可以是项目可执行目标如 myproject.elf。
+‌第二个参数‌：要嵌入的文件路径，可以是源文件或生成的文件。
+‌第三个参数‌：嵌入模式，BINARY 按原样嵌入，TEXT 额外追加一个 null 结尾符，适合嵌入文本或 HTML 等。‌
+🔗 访问嵌入的数据
+链接器按固定规则生成符号，模式为 _binary_<文件名>_start 和 _binary_<文件名>_end。文件名中的特殊字符（如 .、/）会替换成下划线。‌
+
+以嵌入 web/index.html 为例，C 代码中这样获取：
+
+c
+extern const uint8_t index_html_start[] asm("_binary_index_html_start");
+extern const uint8_t index_html_end[] asm("_binary_index_html_end");
+
+size_t size = index_html_end - index_html_start;
+const uint8_t* data = index_html_start;
+⚙️ 嵌入生成的文件
+若文件是构建过程中生成的，用 DEPENDS 确保生成步骤先执行：‌
+
+cmake
+add_custom_command(
+    OUTPUT my_processed_file.bin
+    COMMAND my_process_file_cmd my_unprocessed_file.bin
+)
+
+target_add_binary_data(my_target "my_processed_file.bin" BINARY DEPENDS my_process)
+📝 注意事项
+嵌入大文件会直接增大固件体积，适合放 Web 页面、证书、图片、模型权重等只读资源。
+该方式与文件系统无关，不依赖 LittleFS、SPIFFS 或 FatFS 挂载，数据直接通过指针访问。
+嵌入后可用 OTA 机制更新固件，间接实现嵌入式资源的远程更新。‌
+
