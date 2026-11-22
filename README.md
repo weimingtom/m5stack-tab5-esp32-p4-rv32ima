@@ -97,6 +97,7 @@ espressif/esp-bsp的examples和m5stack/M5Tab5-UserDemo。
 ```
 
 ## References
+* https://burner.m5stack.com/device/tab5  
 * https://github.com/Epiczhul/esp32p4-rv32ima
 * https://github.com/cnlohr/mini-rv32ima
 * https://github.com/weimingtom/wmt_riscv_study
