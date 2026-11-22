@@ -194,13 +194,14 @@ ncurses
 (baidupan) tiny386_net.zip  
 * https://github.com/zhangjiantao/tcmips/tree/main/demo/tiny386
 * https://github.com/evansm7/umac
-* xv6 native and web emulator   
+* xv6 native and web emulator (this simulator is not for x86, it is for gaia architecture)        
 https://github.com/nullpo-head/emcc-gaia-simu     
 https://nullpo-head.github.io/emcc-gaia-simu/xv6.html  
 https://github.com/nyuichi/xv6  
 * https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/lisp.c  
 https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/fib  
 https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/1-examples  
+https://github.com/x653/xv6-riscv-fpga/blob/main/xv6-riscv/user/lisp.c  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
