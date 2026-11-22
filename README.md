@@ -206,6 +206,7 @@ https://github.com/x653/xv6-riscv-fpga/blob/main/xv6-riscv/user/lisp.c
 * https://github.com/gywan94/m5stack-tab5-nc1020     
 https://github.com/wangyu-/NC2000   
 https://github.com/johnaa123/miyoo_src/blob/master/wqx/nc1020.cpp  
+work_nc1020_v1.tar.gz  
 ```
 nc1020在ubuntu14下的编译运行效果，不过键位有问题，软键盘点不下去（可能要改代码）。
 这个代码其实是在miyoo的开源项目中，叫johnaa123/miyoo_src ​​​
