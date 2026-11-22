@@ -203,6 +203,20 @@ https://github.com/nyuichi/xv6
 https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/fib  
 https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/1-examples  
 https://github.com/x653/xv6-riscv-fpga/blob/main/xv6-riscv/user/lisp.c  
+* https://github.com/gywan94/m5stack-tab5-nc1020     
+https://github.com/wangyu-/NC2000  
+* virtualnoah, NP1100, JZ4740, qemu-NP_120730   
+https://github.com/ljkgpxs/virtualnoah  
+https://github.com/OpenNoah/virtualnoah  
+https://github.com/OpenNoahEdu/virtualnoah   
+* virtualmips  
+https://code.google.com/archive/p/virtualmips  
+https://github.com/RetroBSD/retrobsd/tree/master/tools/virtualmips  
+virtualmips-0.01_run_success_need_libelf-dev.tar.gz  
+from virtualmips  
+https://elinux.org/CELinux_040503_Release  
+https://osdn.net/projects/sfnet_virtualmips/  
+https://sourceforge.net/projects/virtualmips/files/virtualmips/  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
