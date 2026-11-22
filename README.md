@@ -194,6 +194,10 @@ ncurses
 (baidupan) tiny386_net.zip  
 * https://github.com/zhangjiantao/tcmips/tree/main/demo/tiny386
 * https://github.com/evansm7/umac
+* xv6 native and web emulator   
+https://github.com/nullpo-head/emcc-gaia-simu     
+https://nullpo-head.github.io/emcc-gaia-simu/xv6.html  
+https://github.com/nyuichi/xv6  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
