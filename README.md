@@ -198,6 +198,9 @@ ncurses
 https://github.com/nullpo-head/emcc-gaia-simu     
 https://nullpo-head.github.io/emcc-gaia-simu/xv6.html  
 https://github.com/nyuichi/xv6  
+* https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/lisp.c  
+https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/fib  
+https://github.com/x653/xv6-riscv-fpga/blob/main/lisp/1-examples  
 
 ## How to port to mingw
 * https://github.com/cnlohr/mini-rv32ima/blob/master/mini-rv32ima/mini-rv32ima.c
